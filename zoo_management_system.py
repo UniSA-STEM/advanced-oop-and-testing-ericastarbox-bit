@@ -10,6 +10,7 @@ from animal import Reptile, Mammal, Bird, Animal
 from enclosure import Enclosure
 from staff import Staff
 
+# TODO Separate all classes into their own files.
 
 class ZooManagementSystem:
     def __init__(self):
