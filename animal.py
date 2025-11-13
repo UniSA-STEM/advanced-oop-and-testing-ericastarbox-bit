@@ -1,9 +1,9 @@
 """
-File: filename.py
+File: animal.py
 Description: A brief description of this Python module.
 Author: Erica Box
-ID: 110100110
-Username: bizvy001
+ID: 110468687
+Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 from abc import ABC, abstractmethod
@@ -16,60 +16,60 @@ for all animals. Only the 'speak' method is abstract, and it is defined in the g
 
 class Animal(ABC):
     def __init__(self, name: str, species: str, age: int, dietary_needs: str):
-        self.__name = name
-        self.__species = species
-        self.__age = age
-        self.__dietary_needs = dietary_needs
+        self._name = name
+        self._species = species
+        self._age = age
+        self._dietary_needs = dietary_needs
 
     @abstractmethod
     def speak(self):
         pass
 
     def eat(self):
-        print(f"{self.__name} is eating {self.__dietary_needs}.")
+        print(f"{self._name} is eating {self._dietary_needs}.")
 
     def sleep(self):
-        print(f"{self.__name} is sleeping.")
+        print(f"{self._name} is sleeping.")
 
     def __str__(self):
-        return f"I am {self.__name} the {self.__species} and I am {self.__age} years old."
+        return f"I am {self._name} the {self._species} and I am {self._age} years old."
 
 
 # This is an abstract subclass — no new methods or attributes.
-class Mammal(Animal):
+class Mammal(Animal, ABC):
     pass
 
 
 # This is an abstract subclass — no new methods or attributes.
-class Reptile(Animal):
+class Reptile(Animal, ABC):
     pass
 
 
 # This is an abstract subclass — no new methods or attributes.
-class Bird(Animal):
+class Bird(Animal, ABC):
     pass
 
 
-class Elephant(Mammal):
+class Elephant(Mammal):   # Need to come through and add attributes to the class
     def speak(self):
-        print(f"{self.__name} says 'roar!'")
+        print(f"{self._name} says 'roar!'")
 
 class Lion(Mammal):
     def speak(self):
-        print(f"{self.__name} says 'roar!'")
+        print(f"{self._name} says 'roar!'")
 
 class Snake(Reptile):
     def speak(self):
-        print(f"{self.__name} says 'hiss!'")
+        print(f"{self._name} says 'hiss!'")
 
 class Crocodile(Reptile):
     def speak(self):
-        print(f"{self.__name} says 'cluck!'")
+        print(f"{self._name} says 'cluck!'")
 
 class Peacock(Bird):
     def speak(self):
-        print(f"{self.__name} screams!")
+        print(f"{self._name} screams!")
 
 class Swan(Bird):
     def speak(self):
-        print(f"{self.__name} honks!")
+        print(f"{self._name} honks!")
