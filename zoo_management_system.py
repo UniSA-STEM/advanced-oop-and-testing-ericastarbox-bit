@@ -7,7 +7,7 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 from animal import Reptile, Mammal, Bird, Animal
-from enclosure import Enclosure
+from enclosure import Enclosure, Terrestrial, Terranium, Aviary
 from staff import Staff
 
 # TODO Separate all classes into their own files.
@@ -18,10 +18,10 @@ class ZooManagementSystem:
         self.enclosures = []
         self.staff = []
 
-    def generate_report:   # TODO: Should print a report across the zoo, including animals, enclosures, and staff.
+    def generate_report(self):   # TODO: Should print a report across the zoo, including animals, enclosures, and staff.
         print("Generating report...")
 
-    def schedule_daily_routines:  # TODO: Such as cleanings and feedings
+    def schedule_daily_routines(self):  # TODO: Such as cleanings and feedings
 
     """
     Validation: animals can only be assigned to certain environment types.
@@ -32,11 +32,11 @@ class ZooManagementSystem:
     """
 
     def assign_animal(self, animal, enclosure):  # Assign animal to enclosure.
-        animal_enclosures = {Mammals: Terrestrial, Reptile: Terranium, Birds: Aviary}
+        animal_enclosures = {Mammal: Terrestrial, Reptile: Terranium, Bird: Aviary}
 
-        def validate_enclosure(animal, enclosure):  # Check that the correct enclosure type is assigned.
-            required_enclosure = animal_enclosures.get(type(animal))
-            return isinstance(enclosure, required_enclosure)
+        def validate_enclosure(animal_obj, enclosure_obj):  # Check that the correct enclosure type is assigned.
+            required_enclosure = animal_enclosures.get(type(animal_obj))
+            return isinstance(enclosure_obj, required_enclosure)
 
         if validate_enclosure(animal, enclosure):  # If correct enclosure type, add animal to enclosure.
             enclosure.animals.append(animal)

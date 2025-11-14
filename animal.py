@@ -7,8 +7,7 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 from abc import ABC, abstractmethod
-
-# TODO Separate all classes into their own files.
+from symtable import Class
 
 """
 This is a abstract parent class, in which we define the common attributes and methods
@@ -35,48 +34,3 @@ class Animal(ABC):
 
     def __str__(self):
         return f"I am {self._name} the {self._species} and I am {self._age} years old."
-
-
-# This is an abstract subclass — no new methods or attributes.
-class Mammal(Animal, ABC):
-    pass
-
-
-# This is an abstract subclass — no new methods or attributes.
-class Reptile(Animal, ABC):
-    pass
-
-
-# This is an abstract subclass — no new methods or attributes.
-class Bird(Animal, ABC):
-    pass
-
-
-class Elephant(Mammal):  # Need to come through and add attributes to the class
-    def speak(self):
-        print(f"{self._name} says 'roar!'")
-
-
-class Lion(Mammal):
-    def speak(self):
-        print(f"{self._name} says 'roar!'")
-
-
-class Snake(Reptile):
-    def speak(self):
-        print(f"{self._name} says 'hiss!'")
-
-
-class Crocodile(Reptile):
-    def speak(self):
-        print(f"{self._name} says 'cluck!'")
-
-
-class Peacock(Bird):
-    def speak(self):
-        print(f"{self._name} screams!")
-
-
-class Swan(Bird):
-    def speak(self):
-        print(f"{self._name} honks!")
