@@ -6,6 +6,7 @@ ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
+import random
 from abc import ABC, abstractmethod
 from symtable import Class
 
@@ -27,7 +28,11 @@ class Animal(ABC):
         pass
 
     def eat(self):
-        print(f"{self._name} is eating {self._dietary_needs}.")
+        foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
+                 "omnivore": ["insects", "nuts", "small fish", "grains"],
+                 "carnivore": ["meat", "eggs", "fish"]}
+        food = random.choice(foods[self._dietary_needs])
+        print(f"{self._name} is eating {food}.")
 
     def sleep(self):
         print(f"{self._name} is sleeping.")
