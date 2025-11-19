@@ -11,7 +11,7 @@ from elephant import Elephant
 
 """ 
 Test creating an instance of an elephant. 
-Test performing basic actions. 
+Test performing basic actions like speak, eat, and sleep
 """
 
 dumbo = Elephant("Dumbo", 2)

@@ -13,33 +13,105 @@ from animal import Animal
 # TODO Separate all classes into their own files.
 
 class Staff(ABC):
-    def __init__(self):
-        self.animals = []
-        self.job = None
+    def __init__(self, name):
+        self._name = name
+        self._animals = []
+        self._job = None
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def animals(self):
+        return self._animals
+
+    @animals.setter
+    def animals(self, animals):
+        self._animals = animals
+
+    @property
+    def job(self):
+        return self._job
+
+    @job.setter
+    def job(self, job):
+        self._job = job
 
 
 class Vet(Staff):
-    pass
+    def __init__(self, name):
+        super().__init__(name)
+        self._name = name
+        self._animals = []
+        self._job = "Veterinarian"
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def animals(self):
+        return self._animals
+
+    @animals.setter
+    def animals(self, animals):
+        self._animals = animals
+
+    @property
+    def job(self):
+        return self._job
+
 
     def health_check(self, animal: Animal):
         print("Checking animal health.")   #TODO should print the Health Report of the animal.
 
 
 class ZooKeeper(Staff):
-    def __init__(self):
-        super().__init__()
-        self.animals = []
-        self.job = ""
+    def __init__(self, name):
+        super().__init__(name)
+        self._name = name
+        self._animals = []
+        self._job = "Zoo Keeper"
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def animals(self):
+        return self._animals
+
+    @animals.setter
+    def animals(self, animals):
+        self._animals = animals
+
+    @property
+    def job(self):
+        return self._job
 
     def feed_animals(self):  # TODO Perhaps update to allow for specific animals.
         print("Feeding animals.")
 
 
 class Cleaner(Staff):
-    def __init__(self):
-        super().__init__()
-        self.animals = None
-        self.job = "Cleaning"
+    def __init__(self, name):
+        super().__init__(name)
+        self._name = name
+        self._animals = None
+        self._job = "Cleaning"
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def animals(self):
+        return self._animals
+
+    @animals.setter
+    def animals(self, animals):
+        self._animals = animals
 
     def cleaning_enclosures(self, enclosure):  # TODO: Should alter cleanliness level of enclosure.
         print("Cleaning enclosures.")

@@ -27,6 +27,22 @@ class Animal(ABC):
     def speak(self):
         pass
 
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def species(self):
+        return self._species
+
+    @property
+    def age(self):
+        return self._age
+
+    @property
+    def dietary_needs(self):
+        return self._dietary_needs
+
     def eat(self):
         foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
                  "omnivore": ["insects", "nuts", "small fish", "grains"],
