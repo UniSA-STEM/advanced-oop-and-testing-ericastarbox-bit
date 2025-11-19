@@ -6,30 +6,32 @@ ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
-from animal import Animal
 from bird import Bird
 from crocodile import Crocodile
 from elephant import Elephant
-from enclosure import Enclosure, Terrestrial, Terranium, Aviary
+from enclosure import Terrestrial, Terranium, Aviary
 from lion import Lion
 from mammal import Mammal
 from peacock import Peacock
 from reptile import Reptile
 from snake import Snake
-from staff import Staff, Cleaner, Vet, ZooKeeper
+from staff import Cleaner, Vet, ZooKeeper
 from swan import Swan
 
 
-# TODO Separate all classes into their own files.
-
 class ZooManagementSystem:
+    """ A class representing a Zoo Management System."""
+
     def __init__(self, name):
         self.name = name
         self.animals = []
         self.enclosures = []
         self.staff = []
 
-    def generate_report(self):  # TODO: Should print a report across the zoo, including animals, enclosures, and staff.
+    def generate_report(self):
+        """
+        Generates a report of the Zoo Management System.
+        """
         print("\n=========================================")
         print(f"         {self.name.upper()} MANAGEMENT REPORT")
         print("=========================================")
@@ -38,132 +40,176 @@ class ZooManagementSystem:
         print("ANIMALS")
         print(f"Total Animals: {len(self.animals)}")
         for animal in self.animals:
-            print(f" - {animal.name}\n    Species: {animal.__class__.__name__}\n    Age: {animal.age}\n")
+            print(f" - {animal.name}\n     Species: {animal.__class__.__name__}\n     "
+                  f"Age: {animal.age}\n")
         print()
 
         print("ENCLOSURES")
         print(f"Total Enclosures: {len(self.enclosures)}")
         for enclosure in self.enclosures:
-            print(f" - {enclosure.name}\n    Size: {enclosure._size}\n    Cleanliness: {enclosure._cleanliness}\n"
-                  f"Animals: {enclosure._animals}\n   ")
+            print(f" - {enclosure.name}\n     Size: {enclosure._size}m\u00b2\n     Cleanliness: "
+                  f"Level {enclosure._cleanliness}\n     Animals: {enclosure._animals if enclosure._animals
+                  else 'None'}")
         print()
 
         print("STAFF")
         print(f"Total Staff: {len(self.staff)}")
         for staff in self.staff:
-            print(f" - {staff.name}\n    Job: {staff.job}\n   Assigned Animals: {staff.animals}\n")
+            print(f" - {staff.name}\n    Job: {staff.job}\n     Assigned Animals: {staff.animals if
+            staff.animals else 'None'}\n")
         print()
 
         print("End of Report")
         print("----------------------------------------")
 
     def schedule_daily_routines(self):  # TODO: Such as cleanings and feedings
+        """ Schedules daily routines for the Zoo Management System."""
         print("Scheduling daily routines...")
 
-    """
-    Validation: animals can only be assigned to certain environment types.
-    Mammals to terrestrial
-    Reptiles to terrarium
-    Birds to aviary
-    Note: Is there any way to use a dictionary to map and validate these and shorten the code?
-    """
+    def get_required_enclosure(self, animal):
+        """ Returns the enclosure class required for a given animal type."""
+        rules = {
+            Mammal: Terrestrial,
+            Reptile: Terranium,
+            Bird: Aviary
+        }
+        return rules.get(type(animal))
 
-    def assign_animal(self, animal, enclosure):  # Assign animal to enclosure.
-        animal_enclosures = {Mammal: Terrestrial, Reptile: Terranium, Bird: Aviary}
+    def is_valid_enclosure(self, animal, enclosure):
+        """ Returns True if the enclosure is appropriate for the animal."""
+        required = self.get_required_enclosure(animal)
+        return isinstance(enclosure, required)
 
-        def validate_enclosure(animal_obj, enclosure_obj):  # Check that the correct enclosure type is assigned.
-            required_enclosure = animal_enclosures.get(type(animal_obj))
-            return isinstance(enclosure_obj, required_enclosure)
-
-        if validate_enclosure(animal, enclosure):  # If correct enclosure type, add animal to enclosure.
+    def assign_animal(self, animal, enclosure):
+        """ Assigns an animal to an enclosure if the enclosure type is valid."""
+        if self.is_valid_enclosure(animal, enclosure):
             enclosure.animals.append(animal)
+            print(f"{animal.name} assigned to {enclosure.name}.")
         else:
-            print("Invalid assignment.")
+            print("Invalid assignment: enclosure type does not match the animal.")
 
-    """
-    Helper method to add and remove animals, enclosures, or staff to the ZooManagementSystem. 
-    This was originally two separate methods, but I decided to combine them into one.
-    """
+    def validate_choice(self, choice):
+        """ Validate the user's choice when calling the 'modify' method."""
+        if choice.lower() not in ["add", "remove"]:
+            print("Invalid choice. Must be 'add' or 'remove'.")
+            return False
+        return True
 
-    def modify(self, choice: str,
-               item: str):  # TODO this will need to be broken into several functions, as there is too much logic in one.
-        # Validate the choice.
-        choice_list = ["add", "remove"]
-        if choice.lower() not in choice_list:
-            print(f"Invalid choice. Choice must be one of the following: {choice_list}.")
-            return
+    def validate_item(self, item):
+        """ Validate the item when calling the 'modify' method."""
+        if item.lower() not in ["animal", "enclosure", "staff"]:
+            print("Invalid item. Must be 'animal', 'enclosure', or 'staff'.")
+            return False
+        return True
 
-        # Validate the item.
-        item_list = ["animal", "enclosure", "staff"]
-        if item.lower() not in item_list:
-            print(f"Invalid item. Item must be one of the following: {item_list}.")
-            return
+    def get_valid_age(self):
+        """ Validate the age of an animal."""
+        while True:
+            age_input = input("Enter age: ")
+            try:
+                age = float(age_input)
+                if age.is_integer() and age >= 0:
+                    return int(age)
+            except:
+                pass
+            print("Invalid age — please enter a whole number.")
 
-        # An item matrix, linking the item type to the correct list.
+    def get_item_class(self, item):
+        """ Returns the class of an item based on user input."""
         item_matrix = {
-            "animal": {"lion": Lion, "crocodile": Crocodile, "elephant": Elephant, "peacock": Peacock,
-                       "snake": Snake, "swan": Swan},
-            "enclosure": {"terrestrial": Terrestrial, "terranium": Terranium, "aviary": Aviary},
-            "staff": {"vet": Vet, "zoo keeper": ZooKeeper, "cleaner": Cleaner}
+            "animal": {
+                "lion": Lion, "crocodile": Crocodile, "elephant": Elephant,
+                "peacock": Peacock, "snake": Snake, "swan": Swan
+            },
+            "enclosure": {
+                "terrestrial": Terrestrial, "terranium": Terranium, "aviary": Aviary
+            },
+            "staff": {
+                "vet": Vet, "zoo keeper": ZooKeeper, "cleaner": Cleaner
+            }
         }
 
-        keys = list(item_matrix[item].keys())
+        options = list(item_matrix[item].keys())
 
-        # Give the user a list of available items to choose from.
-        options = "\n".join(f"{i + 1}. {key}" for i, key in enumerate(keys))
-        print(f"Choose {item} type to add to {self.name}:")
-        print(options)
-        new_item = input("Enter your choice: ")  # TODO now should create an instance of the object
+        print(f"Choose {item} type:")
+        for i, key in enumerate(options, start=1):
+            print(f"{i}. {key.title()}")
 
-        # Validate the user's choice.
-        # If the user entered a number:
-        if new_item.isdigit():
-            index = int(new_item) - 1
-            selected_key = keys[index]
-            # find class in item matrix
-            cls = item_matrix[item][selected_key]
+        choice = input("Enter your choice: ").strip().lower()
 
-        # If the user entered the name directly
-        elif new_item in keys:
-            selected_key = new_item
-            cls = item_matrix[item][selected_key]
-        else:
-            print("Invalid selection.")
-            return
+        if choice.isdigit():
+            idx = int(choice) - 1
+            if 0 <= idx < len(options):
+                key = options[idx]
+                return item_matrix[item][key]
 
-        # Ask for attributes
-        name = input(f"What is the name of the {item}? ")
+        if choice in options:
+            return item_matrix[item][choice]
+
+        print("Invalid selection.")
+        return None
+
+    def create_object(self, item, cls):
+        """ Creates an object based on user input."""
+        name = input(f"What is the name of the {item}? ").title()
 
         if item == "animal":
-            age = int(input(f"How many years old is {name}? "))
-            obj = cls(name, age)
-        else:
-            obj = cls(name)
+            age = self.get_valid_age()
+            return cls(name, age)
 
-        # Dictionary to map class types to the correct attribute list.
-        class_to_attribute = {
+        return cls(name)
+
+    def get_target_list(self, item):
+        return {
             "animal": self.animals,
             "enclosure": self.enclosures,
             "staff": self.staff
-        }
+        }[item]
 
-        # Defines which attribute list to add/remove the item to/from.
-        target_attribute_list = class_to_attribute[item.lower()]
+    def add_item(self, obj, target_list, item):
+        """ Adds an item to the target list."""
+        target_list.append(obj)
+        print(f"Added {obj.__class__.__name__} named {obj.name} to {self.name}'s {item} list.\n")
 
-        # Perform the change
+    def remove_item(self, obj, target_list, item):
+        """ Removes an item from the target list."""
+        if obj in target_list:
+            target_list.remove(obj)
+            print(f"Removed {obj.__class__.__name__} named {obj.name} from {self.name}'s {item} list.\n")
+        else:
+            print("Item not found.\n")
+
+    def modify(self, choice: str, item: str):
+        """ Modify the Zoo Management System."""
+        item = item.lower()
+        choice = choice.lower()
+
+        if not self.validate_choice(choice):
+            return
+
+        if not self.validate_item(item):
+            return
+
+        cls = self.get_item_class(item)
+        if cls is None:
+            return
+
+        obj = self.create_object(item, cls)
+
+        target_list = self.get_target_list(item)
+
         if choice == "add":
-            target_attribute_list.append(obj)
-            print(f"Added {obj.__class__.__name__} named {obj.name} to {self.name}'s {item} list.")
-        elif choice == "remove":
-            if obj in target_attribute_list:
-                target_attribute_list.remove(obj)
-                print(f"Removed {obj.__class__.__name__} named {obj.name} from {self.name}'s {item} list.")
-            else:
-                print("Item not found.")
+            self.add_item(obj, target_list, item)
+        else:
+            self.remove_item(obj, target_list, item)
 
-
+#TODO Remove the test code.
 zoopac = ZooManagementSystem("Zoopac")
 zoopac.modify("add", "animal")
+zoopac.modify("add", "animal")
+zoopac.modify("add", "animal")
 zoopac.modify("add", "staff")
+zoopac.modify("add", "staff")
+zoopac.modify("add", "enclosure")
 zoopac.modify("add", "enclosure")
 zoopac.generate_report()
