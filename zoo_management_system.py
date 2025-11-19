@@ -47,8 +47,8 @@ class ZooManagementSystem:
         print("ENCLOSURES")
         print(f"Total Enclosures: {len(self.enclosures)}")
         for enclosure in self.enclosures:
-            print(f" - {enclosure.name}\n     Size: {enclosure._size}m\u00b2\n     Cleanliness: "
-                  f"Level {enclosure._cleanliness}\n     Animals: {enclosure._animals if enclosure._animals
+            print(f" - {enclosure.name}\n     Size: {enclosure.size}m\u00b2\n     Cleanliness: "
+                  f"Level {enclosure.cleanliness}\n     Animals: {enclosure.animals if enclosure.animals
                   else 'None'}")
         print()
 
@@ -63,8 +63,31 @@ class ZooManagementSystem:
         print("----------------------------------------")
 
     def schedule_daily_routines(self):  # TODO: Such as cleanings and feedings
-        """ Schedules daily routines for the Zoo Management System."""
-        print("Scheduling daily routines...")
+        """
+        Generates and prints a daily routine schedule for the zoo,
+        including feeding times for animals and cleaning tasks for enclosures.
+        """
+        print("\n==========================================")
+        print(f"        {self.name.upper()} DAILY ROUTINES")
+        print("==========================================\n")
+
+        # Feeding schedule
+        print("FEEDING SCHEDULE")
+        if not self.animals:
+            print(" - No animals to feed.\n")
+        else:
+            for animal in self.animals:
+                print(f" - Feed {animal.name} ({animal.__class__.__name__})")
+
+        print("\nCLEANING SCHEDULE")
+        if not self.enclosures:
+            print(" - No enclosures to clean.\n")
+        else:
+            for enclosure in self.enclosures:
+                print(f" - Clean {enclosure.name} (Cleanliness level: {enclosure.cleanliness})")
+
+        print("\nEnd of Daily Routine Schedule")
+        print("------------------------------------------\n")
 
     def get_required_enclosure(self, animal):
         """ Returns the enclosure class required for a given animal type."""
@@ -103,7 +126,11 @@ class ZooManagementSystem:
         return True
 
     def get_valid_age(self):
-        """ Validate the age of an animal."""
+        """
+        Prompts the user to enter an animal's age and validates the input.
+        Continues prompting until a non-negative whole number is entered,
+        then returns the age as an integer.
+        """
         while True:
             age_input = input("Enter age: ")
             try:
@@ -205,11 +232,6 @@ class ZooManagementSystem:
 
 #TODO Remove the test code.
 zoopac = ZooManagementSystem("Zoopac")
+zoopac.schedule_daily_routines()
 zoopac.modify("add", "animal")
-zoopac.modify("add", "animal")
-zoopac.modify("add", "animal")
-zoopac.modify("add", "staff")
-zoopac.modify("add", "staff")
-zoopac.modify("add", "enclosure")
-zoopac.modify("add", "enclosure")
-zoopac.generate_report()
+zoopac.schedule_daily_routines()
