@@ -113,5 +113,12 @@ class Cleaner(Staff):
     def animals(self, animals):
         self._animals = animals
 
-    def cleaning_enclosures(self, enclosure):  # TODO: Should alter cleanliness level of enclosure.
-        print("Cleaning enclosures.")
+    def clean_enclosure(self, enclosure):
+        """ Cleans a single enclosure by resetting its cleanliness level."""
+        enclosure.cleanliness = 5
+        print(
+            f"{self.name} cleaned {enclosure.name}. "
+            f"Cleanliness is now level {enclosure.cleanliness}."
+        )
+
+

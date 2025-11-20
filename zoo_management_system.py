@@ -55,7 +55,7 @@ class ZooManagementSystem:
         print("STAFF")
         print(f"Total Staff: {len(self.staff)}")
         for staff in self.staff:
-            print(f" - {staff.name}\n    Job: {staff.job}\n     Assigned Animals: {staff.animals if
+            print(f" - {staff.name}\n     Job: {staff.job}\n     Assigned Animals: {staff.animals if
             staff.animals else 'None'}\n")
         print()
 
@@ -251,7 +251,74 @@ class ZooManagementSystem:
             obj = target_list[idx]
             self.remove_item(obj, target_list, item)
 
+    def _select_cleaner(self):
+        """ Returns a Cleaner instance selected by the user, or None if selection fails."""
+        cleaners = [member for member in self.staff if isinstance(member, Cleaner)]
+        if not cleaners:
+            print("No cleaners available.")
+            return None
+
+        if len(cleaners) == 1:
+            cleaner = cleaners[0]
+            print(f"Cleaner selected: {cleaner.name}")
+            return cleaner
+
+        print("Select a Cleaner:")
+        for index, cleaner in enumerate(cleaners, start=1):
+            print(f"{index}. {cleaner.name}")
+
+        choice = input("Enter the number of the cleaner: ").strip()
+        if not choice.isdigit():
+            print("Invalid selection.")
+            return None
+
+        idx = int(choice) - 1
+        if not (0 <= idx < len(cleaners)):
+            print("Invalid selection. Number out of range.")
+            return None
+
+        return cleaners[idx]
+
+    def _select_enclosure(self):
+        """ Returns an Enclosure instance selected by the user, or None if selection fails."""
+        if not self.enclosures:
+            print("There are no enclosures to clean.")
+            return None
+
+        print("Enclosures that can be cleaned:")
+        for index, enclosure in enumerate(self.enclosures, start=1):
+            print(f"{index}. {enclosure.name} (Cleanliness level: {enclosure.cleanliness})")
+
+        choice_str = input("Enter the number of the enclosure to clean: ").strip()
+        if not choice_str.isdigit():
+            print("Invalid selection. Please enter a number.")
+            return None
+
+        choice_index = int(choice_str) - 1
+        if not (0 <= choice_index < len(self.enclosures)):
+            print("Invalid selection. Number out of range.")
+            return None
+
+        return self.enclosures[choice_index]
+
+    def clean_enclosures(self):
+        """ Selects a cleaner and an enclosure to clean, then cleans the enclosure."""
+        cleaner = self._select_cleaner()
+        if cleaner is None:
+            return
+
+        enclosure = self._select_enclosure()
+        if enclosure is None:
+            return
+
+        cleaner.clean_enclosure(enclosure)
+
+
 #TODO Remove the test code.
 zoopac = ZooManagementSystem("Zoopac")
-zoopac.modify("add", "animal")
-zoopac.modify("remove", "animal")
+zoopac.modify("add", "enclosure")
+zoopac.modify("add", "staff")
+zoopac.modify("add", "staff")
+zoopac.clean_enclosures()
+zoopac.generate_report()
+
