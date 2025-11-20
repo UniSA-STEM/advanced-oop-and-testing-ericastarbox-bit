@@ -217,21 +217,41 @@ class ZooManagementSystem:
         if not self.validate_item(item):
             return
 
-        cls = self.get_item_class(item)
-        if cls is None:
-            return
-
-        obj = self.create_object(item, cls)
-
         target_list = self.get_target_list(item)
 
+        # Add branch
         if choice == "add":
+            cls = self.get_item_class(item)
+            if cls is None:
+                return
+            obj = self.create_object(item, cls)
             self.add_item(obj, target_list, item)
+
+        # Remove branch
         else:
+            if not target_list:
+                print(f"No {item}s to remove.\n")
+                return
+
+            print(f"Select a {item} to remove: ")
+            for i, obj in enumerate(target_list, start=1):
+                # animals/staff have .name, enclosures .name too
+                print(f"{i}. {obj.name} ({obj.__class__.__name__})")
+
+            choice_str = input("Enter number: ").strip()
+            if not choice_str.isdigit():
+                print("Invalid selection.\n")
+                return
+
+            idx = int(choice_str) - 1
+            if not (0 <= idx < len(target_list)):
+                print("Invalid selection.\n")
+                return
+
+            obj = target_list[idx]
             self.remove_item(obj, target_list, item)
 
 #TODO Remove the test code.
 zoopac = ZooManagementSystem("Zoopac")
-zoopac.schedule_daily_routines()
 zoopac.modify("add", "animal")
-zoopac.schedule_daily_routines()
+zoopac.modify("remove", "animal")
