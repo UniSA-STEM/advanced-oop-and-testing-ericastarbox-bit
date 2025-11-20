@@ -40,22 +40,37 @@ class ZooManagementSystem:
         print("ANIMALS")
         print(f"Total Animals: {len(self.animals)}")
         for animal in self.animals:
-            print(f" - {animal.name}\n     Species: {animal.__class__.__name__}\n     "
-                  f"Age: {animal.age}\n")
+            print(f" - {animal.name}\n"
+                  f"     Species: {animal.__class__.__name__}\n"
+                  f"     Age: {animal.age}\n")
         print()
 
         print("ENCLOSURES")
         print(f"Total Enclosures: {len(self.enclosures)}")
         for enclosure in self.enclosures:
-            print(f" - {enclosure.name}\n     Size: {enclosure.size}m\u00b2\n     Cleanliness: "
-                  f"Level {enclosure.cleanliness}\n     Animals: {enclosure.animals if enclosure.animals
-                  else 'None'}")
+            if enclosure.animals:
+                animals_str = ", ".join(
+                    f"{animal.name} ({animal.__class__.__name__})"
+                    for animal in enclosure.animals
+                )
+            else:
+                animals_str = "None"
+
+            print(
+                f" - {enclosure.name}\n"
+                f"     Size: {enclosure.size}m\u00b2\n"
+                f"     Cleanliness: Level {enclosure.cleanliness}\n"
+                f"     Animals: {animals_str}"
+            )
+            print()
         print()
 
         print("STAFF")
         print(f"Total Staff: {len(self.staff)}")
         for staff in self.staff:
-            print(f" - {staff.name}\n     Job: {staff.job}\n     Assigned Animals: {staff.animals if
+            print(f" - {staff.name}\n"
+                  f"     Job: {staff.job}\n"
+                  f"     Assigned Animals: {staff.animals if
             staff.animals else 'None'}\n")
         print()
 
@@ -90,17 +105,26 @@ class ZooManagementSystem:
         print("------------------------------------------\n")
 
     def get_required_enclosure(self, animal):
-        """ Returns the enclosure class required for a given animal type."""
-        rules = {
-            Mammal: Terrestrial,
-            Reptile: Terranium,
-            Bird: Aviary
-        }
-        return rules.get(type(animal))
+        """Returns the enclosure class required for a given animal type."""
+        rules = [
+            (Mammal, Terrestrial),
+            (Reptile, Terranium),
+            (Bird, Aviary),
+        ]
+
+        for animal_type, enclosure_type in rules:
+            if isinstance(animal, animal_type):
+                return enclosure_type
+
+        # If no rule matched
+        return None
 
     def is_valid_enclosure(self, animal, enclosure):
-        """ Returns True if the enclosure is appropriate for the animal."""
+        """Returns True if the enclosure is appropriate for the animal."""
         required = self.get_required_enclosure(animal)
+        if required is None:
+            print("No enclosure rule defined for this type of animal.")
+            return False
         return isinstance(enclosure, required)
 
     def assign_animal(self, animal, enclosure):
@@ -206,6 +230,67 @@ class ZooManagementSystem:
         else:
             print("Item not found.\n")
 
+    def _handle_add(self, item: str, target_list: list):
+        """Handles adding animals, enclosures, or staff."""
+        # Special handling for animals – enforce enclosure assignment
+        if item == "animal":
+            # Must have at least one enclosure in the zoo
+            if not self.enclosures:
+                print("You must add at least one enclosure before adding animals.\n")
+                return
+
+            cls = self.get_item_class(item)
+            if cls is None:
+                return
+
+            # Create the animal object
+            animal = self.create_object(item, cls)
+
+            # Select a suitable enclosure based on the animal type
+            enclosure = self._select_enclosure_for_animal(animal)
+            if enclosure is None:
+                print(
+                    f"{animal.name} was not added because no suitable enclosure "
+                    "was selected or available.\n"
+                )
+                return
+
+            # Add animal to the zoo list and assign to enclosure
+            self.add_item(animal, target_list, item)
+            self.assign_animal(animal, enclosure)
+            return  # done with the animal branch
+
+        # Default add logic for enclosure/staff
+        cls = self.get_item_class(item)
+        if cls is None:
+            return
+
+        obj = self.create_object(item, cls)
+        self.add_item(obj, target_list, item)
+
+    def _handle_remove(self, item: str, target_list: list):
+        """Handles removal of animals, enclosures, or staff."""
+        if not target_list:
+            print(f"No {item}s to remove.\n")
+            return
+
+        print(f"Select a {item} to remove: ")
+        for i, obj in enumerate(target_list, start=1):
+            print(f"{i}. {obj.name} ({obj.__class__.__name__})")
+
+        choice_str = input("Enter number: ").strip()
+        if not choice_str.isdigit():
+            print("Invalid selection.\n")
+            return
+
+        idx = int(choice_str) - 1
+        if not (0 <= idx < len(target_list)):
+            print("Invalid selection.\n")
+            return
+
+        obj = target_list[idx]
+        self.remove_item(obj, target_list, item)
+
     def modify(self, choice: str, item: str):
         """ Modify the Zoo Management System."""
         item = item.lower()
@@ -219,65 +304,43 @@ class ZooManagementSystem:
 
         target_list = self.get_target_list(item)
 
-        # Add branch
         if choice == "add":
-            cls = self.get_item_class(item)
-            if cls is None:
-                return
-            obj = self.create_object(item, cls)
-            self.add_item(obj, target_list, item)
-
-        # Remove branch
+            self._handle_add(item, target_list)
         else:
-            if not target_list:
-                print(f"No {item}s to remove.\n")
-                return
+            self._handle_remove(item, target_list)
 
-            print(f"Select a {item} to remove: ")
-            for i, obj in enumerate(target_list, start=1):
-                # animals/staff have .name, enclosures .name too
-                print(f"{i}. {obj.name} ({obj.__class__.__name__})")
-
-            choice_str = input("Enter number: ").strip()
-            if not choice_str.isdigit():
-                print("Invalid selection.\n")
-                return
-
-            idx = int(choice_str) - 1
-            if not (0 <= idx < len(target_list)):
-                print("Invalid selection.\n")
-                return
-
-            obj = target_list[idx]
-            self.remove_item(obj, target_list, item)
-
-    def _select_cleaner(self):
-        """ Returns a Cleaner instance selected by the user, or None if selection fails."""
-        cleaners = [member for member in self.staff if isinstance(member, Cleaner)]
-        if not cleaners:
-            print("No cleaners available.")
+    def _select_staff_member(self, staff_class, role_name: str):
+        """
+        Returns a staff member of the given type selected by the user,
+        or None if no staff of that type exist or selection fails.
+        """
+        staff_of_type = [member for member in self.staff if isinstance(member, staff_class)]
+        if not staff_of_type:
+            print(f"No {role_name}s available.")
             return None
 
-        if len(cleaners) == 1:
-            cleaner = cleaners[0]
-            print(f"Cleaner selected: {cleaner.name}")
-            return cleaner
+        # If only one available, auto-select
+        if len(staff_of_type) == 1:
+            selected = staff_of_type[0]
+            print(f"{role_name} selected: {selected.name}")
+            return selected
 
-        print("Select a Cleaner:")
-        for index, cleaner in enumerate(cleaners, start=1):
-            print(f"{index}. {cleaner.name}")
+        # Otherwise, give the user the choice to select
+        print(f"Select a {role_name}:")
+        for index, member in enumerate(staff_of_type, start=1):
+            print(f"{index}. {member.name}")
 
-        choice = input("Enter the number of the cleaner: ").strip()
+        choice = input(f"Enter the number of the {role_name.lower()}: ").strip()
         if not choice.isdigit():
             print("Invalid selection.")
             return None
 
         idx = int(choice) - 1
-        if not (0 <= idx < len(cleaners)):
+        if not (0 <= idx < len(staff_of_type)):
             print("Invalid selection. Number out of range.")
             return None
 
-        return cleaners[idx]
+        return staff_of_type[idx]
 
     def _select_enclosure(self):
         """ Returns an Enclosure instance selected by the user, or None if selection fails."""
@@ -301,9 +364,76 @@ class ZooManagementSystem:
 
         return self.enclosures[choice_index]
 
-    def clean_enclosures(self):
+    def _select_enclosure_for_animal(self, animal):
+        """ Returns an enclosure of the correct type for the given animal"""
+        required_type = self.get_required_enclosure(animal)
+        if required_type is None:
+            print("No enclosure rule defined for this type of animal.")
+            return None
+
+        # Filter enclosures to only those of the required type
+        valid_enclosures = [
+            enclosure for enclosure in self.enclosures
+            if isinstance(enclosure, required_type)
+        ]
+
+        if not valid_enclosures:
+            print(f"No {required_type.__name__} enclosures available for this animal.")
+            return None
+
+        print(f"Select an enclosure for {animal.name}:")
+        for index, enclosure in enumerate(valid_enclosures, start=1):
+            print(
+                f"{index}. {enclosure.name} "
+                f"(Cleanliness level: {enclosure.cleanliness})"
+            )
+
+        choice_str = input("Enter the number of the enclosure: ").strip()
+        if not choice_str.isdigit():
+            print("Invalid selection. Please enter a number.")
+            return None
+
+        choice_index = int(choice_str) - 1
+        if not (0 <= choice_index < len(valid_enclosures)):
+            print("Invalid selection. Number out of range.")
+            return None
+
+        return valid_enclosures[choice_index]
+
+    def _select_animal(self):
+        """ Returns an Animal selected by the user, or None if selection fails."""
+        if not self.animals:
+            print("There are no animals to feed.")
+            return None
+
+        print("Animals that can be fed:")
+        for index, animal in enumerate(self.animals, start=1):
+            print(f"{index}. {animal.name} ({animal.__class__.__name__}, age {animal.age})")
+
+        choice_str = input("Enter the number of the animal to feed: ").strip()
+        if not choice_str.isdigit():
+            print("Invalid selection. Please enter a number.")
+            return None
+
+        choice_index = int(choice_str) - 1
+        if not (0 <= choice_index < len(self.animals)):
+            print("Invalid selection. Number out of range.")
+            return None
+
+        return self.animals[choice_index]
+
+    def _find_enclosure_for_animal(self, animal):
+        """ Returns the enclosure that contains the given animal, or None if not found."""
+        for enclosure in self.enclosures:
+            if animal in enclosure.animals:
+                return enclosure
+        return None
+
+    def clean_enclosure(self):
         """ Selects a cleaner and an enclosure to clean, then cleans the enclosure."""
-        cleaner = self._select_cleaner()
+        from staff import Cleaner
+
+        cleaner = self._select_staff_member(Cleaner, "Cleaner")
         if cleaner is None:
             return
 
@@ -313,12 +443,37 @@ class ZooManagementSystem:
 
         cleaner.clean_enclosure(enclosure)
 
+    def feed_animals(self):
+        """
+        Coordinates selection of a Zoo Keeper and an animal,
+        then asks the Zoo Keeper to feed the animal.
+        Feeding reduces the cleanliness of the animal's enclosure by 1.
+        """
+        # Select a Zoo Keeper
+        zoo_keeper = self._select_staff_member(ZooKeeper, "Zoo Keeper")
+        if zoo_keeper is None:
+            return
 
-#TODO Remove the test code.
+        # Select an animal
+        animal = self._select_animal()
+        if animal is None:
+            return
+
+        # Find the animal's enclosure
+        enclosure = self._find_enclosure_for_animal(animal)
+        if enclosure is None:
+            print(f"{animal.name} is not currently assigned to any enclosure.")
+            return
+
+        # Ask the Zoo Keeper to feed the animal
+        zoo_keeper.feed_animal(animal, enclosure)
+
+
+# TODO Remove the test code.
 zoopac = ZooManagementSystem("Zoopac")
 zoopac.modify("add", "enclosure")
+zoopac.modify("add", "animal")
 zoopac.modify("add", "staff")
-zoopac.modify("add", "staff")
-zoopac.clean_enclosures()
+zoopac.feed_animals()
 zoopac.generate_report()
 

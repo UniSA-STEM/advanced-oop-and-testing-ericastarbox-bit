@@ -90,8 +90,22 @@ class ZooKeeper(Staff):
     def job(self):
         return self._job
 
-    def feed_animals(self):  # TODO Perhaps update to allow for specific animals.
-        print("Feeding animals.")
+    def feed_animal(self, animal, enclosure):
+        """
+        Feeds a single animal and reduces the cleanliness of its enclosure by 1.
+        Cleanliness will not go below 0.
+        """
+        # Animal eats
+        animal.eat()
+
+        # Reduce cleanliness, ensuring it doesn't go below 0'
+        new_level = max(0, enclosure.cleanliness - 1)
+        enclosure.cleanliness = new_level
+
+        print(
+            f"{self.name} fed {animal.name}. "
+            f"{enclosure.name}'s cleanliness is now level {enclosure.cleanliness}."
+        )
 
 
 class Cleaner(Staff):
@@ -114,7 +128,9 @@ class Cleaner(Staff):
         self._animals = animals
 
     def clean_enclosure(self, enclosure):
-        """ Cleans a single enclosure by resetting its cleanliness level."""
+        """
+        Cleans a single enclosure.
+        """
         enclosure.cleanliness = 5
         print(
             f"{self.name} cleaned {enclosure.name}. "
