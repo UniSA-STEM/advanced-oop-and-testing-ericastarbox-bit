@@ -11,6 +11,10 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from zoo_management_system import ZooManagementSystem
 
 
+# ===============================
+#     MENU PRINT FUNCTIONS
+# ===============================
+
 def print_menu():
     """Print the main menu options for the zoo interface."""
     print("\nWhat would you like to do next?\n")
@@ -77,6 +81,10 @@ def print_reports_menu():
     print("1. View zoo report")
     print("0. Back to main menu")
 
+
+# ===============================
+#     MENU HANDLER FUNCTIONS
+# ===============================
 
 def handle_enclosure_menu(zoo: ZooManagementSystem):
     """Handle all enclosure-related actions."""
@@ -159,6 +167,10 @@ def handle_reports_menu(zoo: ZooManagementSystem):
         else:
             print("Invalid choice. Please enter a number from the menu.")
 
+
+# ===============================
+#     ENTRY POINT FUNCTION
+# ===============================
 
 def start_zoo():
     """Create a ZooManagementSystem and run the text-based interface."""
