@@ -8,8 +8,6 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 from abc import ABC
 
-from animal import Animal
-
 
 # TODO Separate all classes into their own files.
 
@@ -47,9 +45,3 @@ class Staff(ABC):
     @enclosures.setter
     def enclosures(self, enclosures):
         self._enclosures = enclosures
-
-
-
-
-
-

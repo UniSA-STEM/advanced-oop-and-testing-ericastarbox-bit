@@ -9,8 +9,6 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from abc import ABC
 
 
-# TODO Separate all classes into their own files.
-
 class Enclosure(ABC):
     def __init__(self, name: str, size: int):
         self._name = name
@@ -49,18 +47,3 @@ class Enclosure(ABC):
 
     def list_animals(self):
         print(f"Animals in the enclosure: {self._animals}")
-
-
-class Terrestrial(Enclosure):
-    def __init__(self, name):
-        super().__init__(name, size=1200)
-
-
-class Terranium(Enclosure):
-    def __init__(self, name):
-        super().__init__(name, size=80)
-
-
-class Aviary(Enclosure):
-    def __init__(self, name):
-        super().__init__(name, size=300)

@@ -9,7 +9,9 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from bird import Bird
 from crocodile import Crocodile
 from elephant import Elephant
-from enclosure import Terrestrial, Terranium, Aviary
+from terranium import Terranium
+from terrestrial import Terrestrial
+from aviary import Aviary
 from lion import Lion
 from mammal import Mammal
 from peacock import Peacock
@@ -65,7 +67,8 @@ class ZooManagementSystem:
                 f"     Species: {animal.__class__.__name__}\n"
                 f"     Age: {animal.age}\n"
                 f"     Undergoing treatment: {animal.treatment_status}\n"
-                f"     On display: {animal.on_display}"
+                f"     On display: {animal.display_status}\n"
+                f"     Enclosure: {animal.enclosure.name if animal.enclosure else 'None'}"
             )
         print()
 
@@ -152,27 +155,50 @@ class ZooManagementSystem:
 
     def assign_animal(self, animal, enclosure):
         """ Assigns an animal to an enclosure if the enclosure type is valid."""
-        if self.is_valid_enclosure(animal, enclosure):
-            enclosure.animals.append(animal)
-            print(f"{animal.name} assigned to {enclosure.name}.")
-        else:
+        if not self.is_valid_enclosure(animal, enclosure):
             print("Invalid assignment: enclosure type does not match the animal.")
+            return False
 
-    def validate_choice(self, choice):
+        # Check compatibility with animals already in the enclosure
+        for existing in enclosure.animals:
+            if not self.animals_are_compatible(existing, animal):
+                print(
+                    f"Cannot assign {animal.name} ({animal.__class__.__name__}) "
+                    f"to {enclosure.name}: incompatible with "
+                    f"{existing.name} ({existing.__class__.__name__})."
+                )
+                return False # Does not add.
+
+        # At this point, enclosure is valid and compatible with animal.
+        enclosure.animals.append(animal)
+        animal.enclosure = enclosure
+        print(f"{animal.name} assigned to {enclosure.name}.")
+
+        # Reduce cleanliness, ensuring it doesn't go below 0'
+        new_level = max(0, enclosure.cleanliness - 1)
+        enclosure.cleanliness = new_level
+        f"{enclosure.name}'s cleanliness is now level {enclosure.cleanliness}."
+
+        return True
+
+    @staticmethod
+    def validate_choice(choice):
         """ Validate the user's choice when calling the 'modify' method."""
         if choice.lower() not in ["add", "remove"]:
             print("Invalid choice. Must be 'add' or 'remove'.")
             return False
         return True
 
-    def validate_item(self, item):
+    @staticmethod
+    def validate_item(item):
         """ Validate the item when calling the 'modify' method."""
         if item.lower() not in ["animal", "enclosure", "staff"]:
             print("Invalid item. Must be 'animal', 'enclosure', or 'staff'.")
             return False
         return True
 
-    def get_valid_age(self):
+    @staticmethod
+    def get_valid_age():
         """
         Prompts the user to enter an animal's age and validates the input.
         Continues prompting until a non-negative whole number is entered,
@@ -188,7 +214,8 @@ class ZooManagementSystem:
                 pass
             print("Invalid age — please enter a whole number.")
 
-    def get_item_class(self, item):
+    @staticmethod
+    def get_item_class(item):
         """ Returns the class of an item based on user input."""
         item_matrix = {
             "animal": {
@@ -278,9 +305,15 @@ class ZooManagementSystem:
                 )
                 return
 
-            # Add animal to the zoo list and assign to enclosure
-            self.add_item(animal, target_list, item)
-            self.assign_animal(animal, enclosure)
+            # Try to assign the animal to the enclosure
+            if self.assign_animal(animal, enclosure):
+                # Only add to the zoo list if assignment succeeded
+                self.add_item(animal, target_list, item)
+            else:
+                print(
+                    f"{animal.name} was not added to the zoo because no compatible "
+                    f"enclosure is available.\n"
+                )
             return  # done with the animal branch
 
         # Default add logic for enclosure/staff
@@ -403,7 +436,8 @@ class ZooManagementSystem:
 
         return self.animals[idx]
 
-    def _select_index(self, items, prompt: str) -> int | None:
+    @staticmethod
+    def _select_index(items, prompt: str) -> int | None:
         """
         Generic helper to let the user select an item by index.
         Returns the selected index or None if selection fails.
@@ -491,7 +525,6 @@ class ZooManagementSystem:
 
         animal = self.animals[idx]
 
-        treatment_status = "Yes" if getattr(animal, "undergoing_treatment", False) else "No"
         print(f"\nHealth issues for {animal.name} (Undergoing treatment: {'Yes' if animal.undergoing_treatment
         else 'No'}):")
 
@@ -571,10 +604,21 @@ class ZooManagementSystem:
 
         new_enclosure = valid_enclosures[idx]
 
-        # Perform the move
+        # Check compatibility with animals already in the new enclosure
+        for existing in new_enclosure.animals:
+            if not self.animals_are_compatible(existing, animal):
+                print(
+                    f"Cannot move {animal.name} ({animal.__class__.__name__}) "
+                    f"to {new_enclosure.name}: incompatible with "
+                    f"{existing.name} ({existing.__class__.__name__})."
+                )
+                return  # do not move
+
+        # If compatible, proceed with the move.
         if animal in current_enclosure.animals:
             current_enclosure.animals.remove(animal)
         new_enclosure.animals.append(animal)
+        animal.enclosure = new_enclosure  # <— track the new enclosure
 
         print(f"{animal.name} has been moved from {current_enclosure.name} to {new_enclosure.name}.")
 
@@ -632,3 +676,20 @@ class ZooManagementSystem:
             self._handle_add(item, target_list)
         else:
             self._handle_remove(item, target_list)
+
+    @staticmethod
+    def animals_are_compatible(animal1, animal2):
+        """ Return True if two animals are allowed to share an enclosure."""
+        # The same species can always share an enclosure
+        if animal1.__class__ is animal2.__class__:
+            return True
+
+        # Allowed mixed-species pair: Peacock + Swan
+        allowed_bird_combo = {"Peacock", "Swan"}
+        pair = {animal1.__class__.__name__, animal2.__class__.__name__}
+        if pair == allowed_bird_combo:
+            return True
+
+        # Everything else is incompatible
+        return False
+

@@ -71,6 +71,11 @@ class Animal(ABC):
         return "Yes" if self.undergoing_treatment else "No"
 
     @property
+    def display_status(self) -> str:
+        """Human-readable status for reports."""
+        return "Yes" if self._on_display else "No"
+
+    @property
     def on_display(self):
         return self._on_display
 
