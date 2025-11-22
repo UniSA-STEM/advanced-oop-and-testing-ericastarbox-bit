@@ -53,6 +53,10 @@ class Animal(ABC):
     def health_records(self):
         return self._health_records
 
+    @health_records.setter
+    def health_records(self, record: HealthRecord):
+        self._health_records.append(record)
+
     @property
     def undergoing_treatment(self):
         return self._undergoing_treatment

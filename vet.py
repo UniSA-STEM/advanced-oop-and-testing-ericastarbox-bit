@@ -8,6 +8,8 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 from staff import Staff
+from animal import Animal
+from health_record import HealthRecord
 
 
 class Vet(Staff):

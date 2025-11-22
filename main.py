@@ -42,6 +42,7 @@ def print_enclosure_menu():
     print("1. Add enclosure")
     print("2. Remove enclosure")
     print("3. Clean an enclosure")
+    print("4. Generate enclosure report")
     print("0. Back to main menu\n")
 
 
@@ -54,6 +55,7 @@ def print_animal_menu():
     print("4. Record animal health issue")
     print("5. View animal health issues")
     print("6. Move an animal to a different enclosure")
+    print("7. Generate animal report")
     print("0. Back to main menu\n")
 
 
@@ -64,6 +66,7 @@ def print_staff_menu():
     print("2. Remove staff")
     print("3. Assign staff to an animal")
     print("4. Assign staff to an enclosure")
+    print("5. Generate staff report")
     print("0. Back to main menu")
 
 
@@ -86,6 +89,8 @@ def handle_enclosure_menu(zoo: ZooManagementSystem):
             zoo.modify("remove", "enclosure")
         elif choice == "3":
             zoo.clean_enclosure()
+        elif choice == "4":
+            zoo.generate_enclosure_report()
         elif choice == "0":
             break
         else:
@@ -110,6 +115,8 @@ def handle_animal_menu(zoo: ZooManagementSystem):
             zoo.view_animal_health()
         elif choice == "6":
             zoo.move_animal()
+        elif choice == "7":
+            zoo.generate_animal_report()
         elif choice == "0":
             break
         else:
@@ -130,6 +137,8 @@ def handle_staff_menu(zoo: ZooManagementSystem):
             zoo.assign_staff_to_animal()
         elif choice == "4":
             zoo.assign_staff_to_enclosure()
+        elif choice == "5":
+            zoo.generate_staff_report()
         elif choice == "0":
             break
         else:

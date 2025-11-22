@@ -48,17 +48,30 @@ class ZooManagementSystem:
         print("=========================================")
         print()
 
-        print("ANIMALS")
+        self.generate_animal_report()
+        self.generate_enclosure_report()
+        self.generate_staff_report()
+
+        print("End of Report")
+        print("----------------------------------------")
+
+    def generate_animal_report(self):
+        """Generates an animal report."""
+        print("\nANIMALS")
         print(f"Total Animals: {len(self.animals)}")
         for animal in self.animals:
-            print(f" - {animal.name}\n"
-                  f"     Species: {animal.__class__.__name__}\n"
-                  f"     Age: {animal.age}\n"
-                  f"     Undergoing treatment: {animal.treatment_status}"
-                  f"     On display: {animal.on_display}")
+            print(
+                f" - {animal.name}\n"
+                f"     Species: {animal.__class__.__name__}\n"
+                f"     Age: {animal.age}\n"
+                f"     Undergoing treatment: {animal.treatment_status}\n"
+                f"     On display: {animal.on_display}"
+            )
         print()
 
-        print("ENCLOSURES")
+    def generate_enclosure_report(self):
+        """Generates an enclosure-only report."""
+        print("\nENCLOSURES")
         print(f"Total Enclosures: {len(self.enclosures)}")
         for enclosure in self.enclosures:
             if enclosure.animals:
@@ -75,10 +88,11 @@ class ZooManagementSystem:
                 f"     Cleanliness: Level {enclosure.cleanliness}\n"
                 f"     Animals: {animals_str}"
             )
-            print()
         print()
 
-        print("STAFF")
+    def generate_staff_report(self):
+        """Generates a staff-only report."""
+        print("\nSTAFF")
         print(f"Total Staff: {len(self.staff)}")
         for staff in self.staff:
             animal_names = ", ".join(a.name for a in staff.animals) if staff.animals else "None"
@@ -91,9 +105,6 @@ class ZooManagementSystem:
                 f"     Assigned Enclosures: {enclosure_names}\n"
             )
         print()
-
-        print("End of Report")
-        print("----------------------------------------")
 
     def schedule_daily_routines(self):  # TODO: Such as cleanings and feedings
         """
