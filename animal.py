@@ -8,7 +8,8 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 import random
 from abc import ABC, abstractmethod
-from symtable import Class
+
+from health_record import HealthRecord
 
 """
 This is a abstract parent class, in which we define the common attributes and methods
@@ -22,6 +23,7 @@ class Animal(ABC):
         self._species = species
         self._age = age
         self._dietary_needs = dietary_needs
+        self._health_records: list[HealthRecord] = []
 
     @abstractmethod
     def speak(self):
@@ -43,6 +45,10 @@ class Animal(ABC):
     def dietary_needs(self):
         return self._dietary_needs
 
+    @property
+    def health_records(self):
+        return self._health_records
+
     def eat(self):
         foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
                  "omnivore": ["insects", "nuts", "small fish", "grains"],
@@ -55,3 +61,21 @@ class Animal(ABC):
 
     def __str__(self):
         return f"I am {self._name} the {self._species} and I am {self._age} years old."
+
+    def add_health_record(
+            self,
+            issue_type: str,
+            description: str,
+            severity: int,
+            treatment_plan: str = "",
+            notes: str = ""
+    ):
+        record = HealthRecord(
+            issue_type=issue_type,
+            description=description,
+            severity=severity,
+            treatment_plan=treatment_plan,
+            notes=notes
+        )
+        self.health_records.append(record)
+        print(f"Health record added for {self._name}: {record}")

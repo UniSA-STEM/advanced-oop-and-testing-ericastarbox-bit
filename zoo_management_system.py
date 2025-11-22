@@ -27,6 +27,11 @@ class ZooManagementSystem:
         self.animals = []
         self.enclosures = []
         self.staff = []
+        self.enclosure_rules = [
+            (Mammal, Terrestrial),
+            (Reptile, Terranium),
+            (Bird, Aviary)
+        ]
 
     def generate_report(self):
         """
@@ -106,13 +111,7 @@ class ZooManagementSystem:
 
     def get_required_enclosure(self, animal):
         """Returns the enclosure class required for a given animal type."""
-        rules = [
-            (Mammal, Terrestrial),
-            (Reptile, Terranium),
-            (Bird, Aviary),
-        ]
-
-        for animal_type, enclosure_type in rules:
+        for animal_type, enclosure_type in self.enclosure_rules:
             if isinstance(animal, animal_type):
                 return enclosure_type
 
@@ -161,7 +160,7 @@ class ZooManagementSystem:
                 age = float(age_input)
                 if age.is_integer() and age >= 0:
                     return int(age)
-            except:
+            except ValueError:
                 pass
             print("Invalid age — please enter a whole number.")
 
@@ -182,7 +181,7 @@ class ZooManagementSystem:
 
         options = list(item_matrix[item].keys())
 
-        print(f"Choose {item} type:")
+        print(f"\nChoose {item} type:")
         for i, key in enumerate(options, start=1):
             print(f"{i}. {key.title()}")
 
@@ -202,7 +201,7 @@ class ZooManagementSystem:
 
     def create_object(self, item, cls):
         """ Creates an object based on user input."""
-        name = input(f"What is the name of the {item}? ").title()
+        name = input(f"\nWhat is the name of the {item}? ").title()
 
         if item == "animal":
             age = self.get_valid_age()
@@ -278,36 +277,12 @@ class ZooManagementSystem:
         for i, obj in enumerate(target_list, start=1):
             print(f"{i}. {obj.name} ({obj.__class__.__name__})")
 
-        choice_str = input("Enter number: ").strip()
-        if not choice_str.isdigit():
-            print("Invalid selection.\n")
-            return
-
-        idx = int(choice_str) - 1
-        if not (0 <= idx < len(target_list)):
-            print("Invalid selection.\n")
+        idx = self._select_index(target_list, "Enter number: ")
+        if idx is None:
             return
 
         obj = target_list[idx]
         self.remove_item(obj, target_list, item)
-
-    def modify(self, choice: str, item: str):
-        """ Modify the Zoo Management System."""
-        item = item.lower()
-        choice = choice.lower()
-
-        if not self.validate_choice(choice):
-            return
-
-        if not self.validate_item(item):
-            return
-
-        target_list = self.get_target_list(item)
-
-        if choice == "add":
-            self._handle_add(item, target_list)
-        else:
-            self._handle_remove(item, target_list)
 
     def _select_staff_member(self, staff_class, role_name: str):
         """
@@ -330,14 +305,8 @@ class ZooManagementSystem:
         for index, member in enumerate(staff_of_type, start=1):
             print(f"{index}. {member.name}")
 
-        choice = input(f"Enter the number of the {role_name.lower()}: ").strip()
-        if not choice.isdigit():
-            print("Invalid selection.")
-            return None
-
-        idx = int(choice) - 1
-        if not (0 <= idx < len(staff_of_type)):
-            print("Invalid selection. Number out of range.")
+        idx = self._select_index(staff_of_type, f"Enter the number of the {role_name.lower()}: ")
+        if idx is None:
             return None
 
         return staff_of_type[idx]
@@ -352,17 +321,11 @@ class ZooManagementSystem:
         for index, enclosure in enumerate(self.enclosures, start=1):
             print(f"{index}. {enclosure.name} (Cleanliness level: {enclosure.cleanliness})")
 
-        choice_str = input("Enter the number of the enclosure to clean: ").strip()
-        if not choice_str.isdigit():
-            print("Invalid selection. Please enter a number.")
+        idx = self._select_index(self.enclosures, "Enter the number of the enclosure to clean: ")
+        if idx is None:
             return None
 
-        choice_index = int(choice_str) - 1
-        if not (0 <= choice_index < len(self.enclosures)):
-            print("Invalid selection. Number out of range.")
-            return None
-
-        return self.enclosures[choice_index]
+        return self.enclosures[idx]
 
     def _select_enclosure_for_animal(self, animal):
         """ Returns an enclosure of the correct type for the given animal"""
@@ -410,17 +373,32 @@ class ZooManagementSystem:
         for index, animal in enumerate(self.animals, start=1):
             print(f"{index}. {animal.name} ({animal.__class__.__name__}, age {animal.age})")
 
-        choice_str = input("Enter the number of the animal to feed: ").strip()
+        idx = self._select_index(self.animals, "Enter the number of the animal to feed: ")
+        if idx is None:
+            return None
+
+        return self.animals[idx]
+
+    def _select_index(self, items, prompt: str) -> int | None:
+        """
+        Generic helper to let the user select an item by index.
+        Returns the selected index or None if selection fails.
+        """
+        if not items:
+            print("There are no items to select from.")
+            return None
+
+        choice_str = input(prompt).strip()
         if not choice_str.isdigit():
             print("Invalid selection. Please enter a number.")
             return None
 
-        choice_index = int(choice_str) - 1
-        if not (0 <= choice_index < len(self.animals)):
+        idx = int(choice_str) - 1
+        if not (0 <= idx < len(items)):
             print("Invalid selection. Number out of range.")
             return None
 
-        return self.animals[choice_index]
+        return idx
 
     def _find_enclosure_for_animal(self, animal):
         """ Returns the enclosure that contains the given animal, or None if not found."""
@@ -431,7 +409,6 @@ class ZooManagementSystem:
 
     def clean_enclosure(self):
         """ Selects a cleaner and an enclosure to clean, then cleans the enclosure."""
-        from staff import Cleaner
 
         cleaner = self._select_staff_member(Cleaner, "Cleaner")
         if cleaner is None:
@@ -468,12 +445,53 @@ class ZooManagementSystem:
         # Ask the Zoo Keeper to feed the animal
         zoo_keeper.feed_animal(animal, enclosure)
 
+    def view_animal_health(self):
+        """Let the user select an animal and view its health records."""
+        if not self.animals:
+            print("There are no animals in the zoo yet.")
+            return
 
-# TODO Remove the test code.
-zoopac = ZooManagementSystem("Zoopac")
-zoopac.modify("add", "enclosure")
-zoopac.modify("add", "animal")
-zoopac.modify("add", "staff")
-zoopac.feed_animals()
-zoopac.generate_report()
+        print("\nAnimals in the zoo:")
+        for index, animal in enumerate(self.animals, start=1):
+            print(f"{index}. {animal.name} ({animal.__class__.__name__}, age {animal.age})")
+
+        choice_str = input("Enter the number of the animal to view health issues: ").strip()
+        if not choice_str.isdigit():
+            print("Invalid selection. Please enter a number.")
+            return
+
+        idx = int(choice_str) - 1
+        if not (0 <= idx < len(self.animals)):
+            print("Invalid selection. Number out of range.")
+            return
+
+        animal = self.animals[idx]
+
+        print(f"\nHealth issues for {animal.name}:")
+        if not getattr(animal, "health_records", []):
+            print(" - No health records have been recorded for this animal.")
+            return
+
+        for record in animal.health_records:
+            print(f" - {record}")
+
+    def modify(self, choice: str, item: str):
+        """Modify the Zoo Management System by adding or removing animals, enclosures, or staff."""
+        item = item.lower()
+        choice = choice.lower()
+
+        if not self.validate_choice(choice):
+            return
+
+        if not self.validate_item(item):
+            return
+
+        target_list = self.get_target_list(item)
+
+        if choice == "add":
+            self._handle_add(item, target_list)
+        else:
+            self._handle_remove(item, target_list)
+
+
 
