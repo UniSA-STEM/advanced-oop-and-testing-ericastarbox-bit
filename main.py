@@ -62,6 +62,8 @@ def print_staff_menu():
     print("\nStaff Management")
     print("1. Add staff")
     print("2. Remove staff")
+    print("3. Assign staff to an animal")
+    print("4. Assign staff to an enclosure")
     print("0. Back to main menu")
 
 
@@ -124,6 +126,10 @@ def handle_staff_menu(zoo: ZooManagementSystem):
             zoo.modify("add", "staff")
         elif choice == "2":
             zoo.modify("remove", "staff")
+        elif choice == "3":
+            zoo.assign_staff_to_animal()
+        elif choice == "4":
+            zoo.assign_staff_to_enclosure()
         elif choice == "0":
             break
         else:

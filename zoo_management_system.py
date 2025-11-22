@@ -15,7 +15,9 @@ from mammal import Mammal
 from peacock import Peacock
 from reptile import Reptile
 from snake import Snake
-from staff import Cleaner, Vet, ZooKeeper
+from vet import Vet
+from cleaner import Cleaner
+from zoo_keeper import ZooKeeper
 from swan import Swan
 
 
@@ -33,6 +35,10 @@ class ZooManagementSystem:
             (Bird, Aviary)
         ]
 
+        # Staff assignment rules
+        self.animal_staff_types = (ZooKeeper, Vet)  # can be assigned to ANIMALS
+        self.enclosure_staff_types = (ZooKeeper, Cleaner)  # can be assigned to ENCLOSURES
+
     def generate_report(self):
         """
         Generates a report of the Zoo Management System.
@@ -48,7 +54,8 @@ class ZooManagementSystem:
             print(f" - {animal.name}\n"
                   f"     Species: {animal.__class__.__name__}\n"
                   f"     Age: {animal.age}\n"
-                  f"     Undergoing treatment: {animal.treatment_status}")
+                  f"     Undergoing treatment: {animal.treatment_status}"
+                  f"     On display: {animal.on_display}")
         print()
 
         print("ENCLOSURES")
@@ -74,10 +81,15 @@ class ZooManagementSystem:
         print("STAFF")
         print(f"Total Staff: {len(self.staff)}")
         for staff in self.staff:
-            print(f" - {staff.name}\n"
-                  f"     Job: {staff.job}\n"
-                  f"     Assigned Animals: {staff.animals if
-            staff.animals else 'None'}\n")
+            animal_names = ", ".join(a.name for a in staff.animals) if staff.animals else "None"
+            enclosure_names = ", ".join(e.name for e in staff.enclosures) if staff.enclosures else "None"
+
+            print(
+                f" - {staff.name}\n"
+                f"     Job: {staff.job}\n"
+                f"     Assigned Animals: {animal_names}\n"
+                f"     Assigned Enclosures: {enclosure_names}\n"
+            )
         print()
 
         print("End of Report")
@@ -298,7 +310,7 @@ class ZooManagementSystem:
         # If only one available, auto-select
         if len(staff_of_type) == 1:
             selected = staff_of_type[0]
-            print(f"{role_name} selected: {selected.name}")
+            print(f"{role_name.capitalize()} selected: {selected.name}")
             return selected
 
         # Otherwise, give the user the choice to select
@@ -318,11 +330,11 @@ class ZooManagementSystem:
             print("There are no enclosures to clean.")
             return None
 
-        print("Enclosures that can be cleaned:")
+        print("Available enclosures:")
         for index, enclosure in enumerate(self.enclosures, start=1):
-            print(f"{index}. {enclosure.name} (Cleanliness level: {enclosure.cleanliness})")
+            print(f"{index}. {enclosure.name.capitalize()} (Cleanliness level: {enclosure.cleanliness})")
 
-        idx = self._select_index(self.enclosures, "Enter the number of the enclosure to clean: ")
+        idx = self._select_index(self.enclosures, "Enter the number of the enclosure to select: ")
         if idx is None:
             return None
 
@@ -469,7 +481,7 @@ class ZooManagementSystem:
         animal = self.animals[idx]
 
         treatment_status = "Yes" if getattr(animal, "undergoing_treatment", False) else "No"
-        print(f"\nHealth issues for {animal.name} (Undergoing treatment: {'Yes' if animal.undergoing_treatment 
+        print(f"\nHealth issues for {animal.name} (Undergoing treatment: {'Yes' if animal.undergoing_treatment
         else 'No'}):")
 
         if not getattr(animal, "health_records", []):
@@ -494,7 +506,8 @@ class ZooManagementSystem:
     def move_animal(self):
         """
         Lets the user move an animal from its current enclosure
-        to another suitable enclosure.
+        to another suitable enclosure, so long as the animal is
+        not undergoing treatment.
         """
         if not self.animals:
             print("There are no animals in the zoo yet.")
@@ -554,6 +567,43 @@ class ZooManagementSystem:
 
         print(f"{animal.name} has been moved from {current_enclosure.name} to {new_enclosure.name}.")
 
+    def assign_staff_to_animal(self):
+        """Assign a Zoo Keeper or Vet to an animal."""
+        # Pick staff
+        staff_member = self._select_staff_member(
+            self.animal_staff_types, "staff member (Zoo Keeper or Vet)"
+        )
+        if staff_member is None:
+            return
+
+        # Pick the animal
+        animal = self._select_animal()
+        if animal is None:
+            return
+
+        # Link them up
+        if animal not in staff_member.animals:
+            staff_member.animals.append(animal)
+
+        print(f"{staff_member.name} is now assigned to {animal.name}.")
+
+    def assign_staff_to_enclosure(self):
+        """Assign a Zoo Keeper or Cleaner to an enclosure."""
+        staff_member = self._select_staff_member(
+            self.enclosure_staff_types, "staff member (Zoo Keeper or Cleaner)"
+        )
+        if staff_member is None:
+            return
+
+        enclosure = self._select_enclosure()
+        if enclosure is None:
+            return
+
+        if enclosure not in staff_member.enclosures:
+            staff_member.enclosures.append(enclosure)
+
+        print(f"{staff_member.name} is now responsible for enclosure {enclosure.name}.")
+
     def modify(self, choice: str, item: str):
         """Modify the Zoo Management System by adding or removing animals, enclosures, or staff."""
         item = item.lower()
@@ -571,6 +621,3 @@ class ZooManagementSystem:
             self._handle_add(item, target_list)
         else:
             self._handle_remove(item, target_list)
-
-
-

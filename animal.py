@@ -23,6 +23,7 @@ class Animal(ABC):
         self._species = species
         self._age = age
         self._dietary_needs = dietary_needs
+        self._on_display = True
 
         # Health-related attributes
         self._health_records: list[HealthRecord] = []
@@ -64,6 +65,14 @@ class Animal(ABC):
     def treatment_status(self) -> str:
         """Human-readable status for reports."""
         return "Yes" if self.undergoing_treatment else "No"
+
+    @property
+    def on_display(self):
+        return self._on_display
+
+    @on_display.setter
+    def on_display(self, value):
+        self._on_display = value
 
     def eat(self):
         foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
