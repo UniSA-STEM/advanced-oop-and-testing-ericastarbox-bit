@@ -1,6 +1,6 @@
 """
 File: vet.py
-Description: A brief description of this Python module.
+Description: Defines the vet class, representing veterinarians in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

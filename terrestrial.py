@@ -1,6 +1,6 @@
 """
 File: terrestrial.py
-Description: Defines
+Description: Defines the terrestrial class, representing terrestrial enclosures in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

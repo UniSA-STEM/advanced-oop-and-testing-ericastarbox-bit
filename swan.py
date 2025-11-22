@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: swan.py
+Description: Defines the swan class, representing swans in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

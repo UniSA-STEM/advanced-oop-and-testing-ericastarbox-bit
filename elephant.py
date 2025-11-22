@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: elephant.py
+Description: Defines the elephant class, representing elephants in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

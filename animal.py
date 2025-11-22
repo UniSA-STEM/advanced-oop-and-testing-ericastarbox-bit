@@ -1,6 +1,7 @@
 """
 File: animal.py
-Description: A brief description of this Python module.
+Description: An abstract animal base class that defines common attributes
+and methods for all animals in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

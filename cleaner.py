@@ -1,6 +1,6 @@
 """
 File: cleaner.py
-Description: A brief description of this Python module.
+Description: Defines the cleaner class, representing staff members who clean the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

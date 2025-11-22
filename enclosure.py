@@ -1,6 +1,6 @@
 """
 File: enclosure.py
-Description: Defines
+Description: Defines the enclosure class, representing the zoo's enclosures.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

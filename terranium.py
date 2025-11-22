@@ -1,6 +1,6 @@
 """
 File: terranium.py
-Description: Defines
+Description: Defines the terranium class, representing terranium enclosures in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

@@ -1,6 +1,6 @@
 """
 File: staff.py
-Description: A brief description of this Python module.
+Description: Defines the staff class, representing staff members in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
@@ -8,8 +8,6 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 from abc import ABC
 
-
-# TODO Separate all classes into their own files.
 
 class Staff(ABC):
     def __init__(self, name):

@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: peacock.py
+Description: Defines the peacock class, representing peacocks in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

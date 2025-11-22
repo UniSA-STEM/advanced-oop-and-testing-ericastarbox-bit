@@ -1,6 +1,6 @@
 """
 File: health_record.py
-Description: A brief description of this Python module.
+Description: Defines the HealthRecord class, representing health issues for zoo animals.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
@@ -12,8 +12,8 @@ from datetime import date
 
 class HealthRecord:
     """
-    Represents a single health issue for an animal, such as an injury,
-    illness, or behavioural concern.
+    Represents a single health issue for an animal, such as an
+    injury, illness, or behavioural concern.
     """
 
     VALID_ISSUE_TYPES = ("injury", "illness", "behavioural")

@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: bird.py
+Description: Defines the bird class, representing birds in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

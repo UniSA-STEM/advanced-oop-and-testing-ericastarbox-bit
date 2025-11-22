@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: reptile.py
+Description: Defines the Reptile class, representing reptiles in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

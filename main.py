@@ -1,6 +1,7 @@
 """
 File: main.py
-Description: A brief description of this Python module.
+Description: A text-based user interface for the Zoo Management System. Allows the player to create and
+manage animals, enclosures, and staff.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

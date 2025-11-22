@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: mammal.py
+Description: Defines the Mammal class, which is a subclass of Animal.
 Author: Erica Box
 ID: 110468687
 Username: boxey001

@@ -1,6 +1,6 @@
 """
-File: animal.py
-Description: A brief description of this Python module.
+File: crocodile.py
+Description: Defines the crocodile class, representing crocodiles in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
