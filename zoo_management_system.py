@@ -47,7 +47,8 @@ class ZooManagementSystem:
         for animal in self.animals:
             print(f" - {animal.name}\n"
                   f"     Species: {animal.__class__.__name__}\n"
-                  f"     Age: {animal.age}\n")
+                  f"     Age: {animal.age}\n"
+                  f"     Undergoing treatment: {animal.treatment_status}")
         print()
 
         print("ENCLOSURES")
@@ -219,7 +220,7 @@ class ZooManagementSystem:
     def add_item(self, obj, target_list, item):
         """ Adds an item to the target list."""
         target_list.append(obj)
-        print(f"Added {obj.__class__.__name__} named {obj.name} to {self.name}'s {item} list.\n")
+        print(f"Added {obj.__class__.__name__} named {obj.name} to {self.name}'s {item} list.")
 
     def remove_item(self, obj, target_list, item):
         """ Removes an item from the target list."""
@@ -344,7 +345,7 @@ class ZooManagementSystem:
             print(f"No {required_type.__name__} enclosures available for this animal.")
             return None
 
-        print(f"Select an enclosure for {animal.name}:")
+        print(f"\nSelect an enclosure for {animal.name}:")
         for index, enclosure in enumerate(valid_enclosures, start=1):
             print(
                 f"{index}. {enclosure.name} "
@@ -366,14 +367,14 @@ class ZooManagementSystem:
     def _select_animal(self):
         """ Returns an Animal selected by the user, or None if selection fails."""
         if not self.animals:
-            print("There are no animals to feed.")
+            print("There are no animals available.")
             return None
 
-        print("Animals that can be fed:")
+        print("Available animals:")
         for index, animal in enumerate(self.animals, start=1):
             print(f"{index}. {animal.name} ({animal.__class__.__name__}, age {animal.age})")
 
-        idx = self._select_index(self.animals, "Enter the number of the animal to feed: ")
+        idx = self._select_index(self.animals, "Enter the number of the animal: ")
         if idx is None:
             return None
 
@@ -467,13 +468,91 @@ class ZooManagementSystem:
 
         animal = self.animals[idx]
 
-        print(f"\nHealth issues for {animal.name}:")
+        treatment_status = "Yes" if getattr(animal, "undergoing_treatment", False) else "No"
+        print(f"\nHealth issues for {animal.name} (Undergoing treatment: {'Yes' if animal.undergoing_treatment 
+        else 'No'}):")
+
         if not getattr(animal, "health_records", []):
             print(" - No health records have been recorded for this animal.")
             return
 
         for record in animal.health_records:
             print(f" - {record}")
+
+    def record_animal_health(self):
+        """Choose a Vet and an Animal, then let the Vet perform a health check."""
+        vet = self._select_staff_member(Vet, "Vet")
+        if vet is None:
+            return
+
+        animal = self._select_animal()
+        if animal is None:
+            return
+
+        vet.health_check(animal)
+
+    def move_animal(self):
+        """
+        Lets the user move an animal from its current enclosure
+        to another suitable enclosure.
+        """
+        if not self.animals:
+            print("There are no animals in the zoo yet.")
+            return
+
+        # Select the animal to move
+        animal = self._select_animal()
+        if animal is None:
+            return
+
+        # Check if the animal is undergoing treatment
+        if getattr(animal, "undergoing_treatment", False):
+            print(f"{animal.name} is currently undergoing treatment and cannot be moved.")
+            return
+
+        # Find the current enclosure
+        current_enclosure = self._find_enclosure_for_animal(animal)
+        if current_enclosure is None:
+            print(f"{animal.name} is not currently assigned to any enclosure.")
+            return
+
+        # Work out what type of enclosure this animal needs
+        required_type = self.get_required_enclosure(animal)
+        if required_type is None:
+            print("No enclosure rule defined for this type of animal.")
+            return
+
+        # Find all valid enclosures of the right type, excluding the current one
+        valid_enclosures = [
+            enclosure for enclosure in self.enclosures
+            if isinstance(enclosure, required_type) and enclosure is not current_enclosure
+        ]
+
+        if not valid_enclosures:
+            print(f"There are no other {required_type.__name__} enclosures to move {animal.name} into.")
+            return
+
+        # Pick a new enclosure from the valid ones
+        print(f"\nCurrent enclosure for {animal.name}: {current_enclosure.name}")
+        print(f"Select a new enclosure for {animal.name}:")
+        for index, enclosure in enumerate(valid_enclosures, start=1):
+            print(
+                f"{index}. {enclosure.name} "
+                f"(Cleanliness level: {enclosure.cleanliness})"
+            )
+
+        idx = self._select_index(valid_enclosures, "Enter the number of the new enclosure: ")
+        if idx is None:
+            return
+
+        new_enclosure = valid_enclosures[idx]
+
+        # Perform the move
+        if animal in current_enclosure.animals:
+            current_enclosure.animals.remove(animal)
+        new_enclosure.animals.append(animal)
+
+        print(f"{animal.name} has been moved from {current_enclosure.name} to {new_enclosure.name}.")
 
     def modify(self, choice: str, item: str):
         """Modify the Zoo Management System by adding or removing animals, enclosures, or staff."""

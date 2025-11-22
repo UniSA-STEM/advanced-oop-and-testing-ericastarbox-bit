@@ -51,7 +51,9 @@ def print_animal_menu():
     print("1. Add animal")
     print("2. Remove animal")
     print("3. Feed an animal")
-    print("4. View animal health issues")
+    print("4. Record animal health issue")
+    print("5. View animal health issues")
+    print("6. Move an animal to a different enclosure")
     print("0. Back to main menu\n")
 
 
@@ -101,7 +103,11 @@ def handle_animal_menu(zoo: ZooManagementSystem):
         elif choice == "3":
             zoo.feed_animals()
         elif choice == "4":
+            zoo.record_animal_health()
+        elif choice == "5":
             zoo.view_animal_health()
+        elif choice == "6":
+            zoo.move_animal()
         elif choice == "0":
             break
         else:
@@ -141,7 +147,7 @@ def handle_reports_menu(zoo: ZooManagementSystem):
 def start_zoo():
     """Create a ZooManagementSystem and run the text-based interface."""
     print("\nWelcome to the Zoo Management System!")
-    zoo_name = input("\nEnter a name for your zoo: ").strip() or "Unnamed Zoo"
+    zoo_name = input("Enter a name for your zoo: ").strip() or "Unnamed Zoo"
     zoo = ZooManagementSystem(zoo_name)
 
     print(f"\nYou’ve just started a zoo called {zoo.name}!")

@@ -64,8 +64,61 @@ class Vet(Staff):
 
 
     def health_check(self, animal: Animal):
-        print("Checking animal health.")   #TODO should print the Health Report of the animal.
+        """ Record a health issue for the given animal."""
+        print(f"\n{self.name} is performing a health check on {animal.name}.")
 
+        issue_type = input("Issue type (injury / illness / behaviour): ").strip().lower()
+        description = input("Describe the issue: ").strip()
+
+        # Get severity 1–5
+        while True:
+            severity_str = input("Severity (1–5): ").strip()
+            if severity_str.isdigit():
+                severity = int(severity_str)
+                if 1 <= severity <= 5:
+                    break
+            print("Please enter a whole number between 1 and 5.")
+
+        treatment_plan = input("Treatment plan (optional, Enter to skip): ").strip()
+        notes = input("Additional notes (optional, Enter to skip): ").strip()
+
+        if hasattr(animal, "add_health_record"):
+            animal.add_health_record(
+                issue_type=issue_type,
+                description=description,
+                severity=severity,
+                treatment_plan=treatment_plan,
+                notes=notes,
+            )
+        else:
+            record = HealthRecord(
+                issue_type=issue_type,
+                description=description,
+                severity=severity,
+                treatment_plan=treatment_plan,
+                notes=notes,
+            )
+            if not hasattr(animal, "health_records"):
+                animal.health_records = []
+            animal.health_records.append(record)
+
+        while True:
+            status = input(
+                f"Is {animal.name} currently undergoing treatment? (y/n): "
+            ).strip().lower()
+            if status in ("y", "yes"):
+                animal.undergoing_treatment = True
+                break
+            elif status in ("n", "no"):
+                animal.undergoing_treatment = False
+                break
+            else:
+                print("Please enter 'y' or 'n'.")
+
+        print(
+            f"Health record added for {animal.name}. "
+            f"Undergoing treatment: {animal.undergoing_treatment}"
+        )
 
 class ZooKeeper(Staff):
     def __init__(self, name):
@@ -128,9 +181,7 @@ class Cleaner(Staff):
         self._animals = animals
 
     def clean_enclosure(self, enclosure):
-        """
-        Cleans a single enclosure.
-        """
+        """ Cleans a single enclosure."""
         enclosure.cleanliness = 5
         print(
             f"{self.name} cleaned {enclosure.name}. "

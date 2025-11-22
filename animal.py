@@ -23,7 +23,10 @@ class Animal(ABC):
         self._species = species
         self._age = age
         self._dietary_needs = dietary_needs
+
+        # Health-related attributes
         self._health_records: list[HealthRecord] = []
+        self._undergoing_treatment = False
 
     @abstractmethod
     def speak(self):
@@ -48,6 +51,19 @@ class Animal(ABC):
     @property
     def health_records(self):
         return self._health_records
+
+    @property
+    def undergoing_treatment(self):
+        return self._undergoing_treatment
+
+    @undergoing_treatment.setter
+    def undergoing_treatment(self, value):
+        self._undergoing_treatment = value
+
+    @property
+    def treatment_status(self) -> str:
+        """Human-readable status for reports."""
+        return "Yes" if self.undergoing_treatment else "No"
 
     def eat(self):
         foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
