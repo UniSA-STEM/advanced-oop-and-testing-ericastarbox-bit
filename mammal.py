@@ -10,6 +10,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from animal import Animal
 from abc import ABC
 
-# This is an abstract subclass — no new methods or attributes.
+
 class Mammal(Animal, ABC):
+    """Abstract subclass of Animal representing all mammal species in the zoo."""
     pass

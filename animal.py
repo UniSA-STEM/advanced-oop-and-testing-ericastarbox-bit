@@ -7,18 +7,22 @@ ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
+
 import random
 from abc import ABC, abstractmethod
-
 from health_record import HealthRecord
-
-"""
-This is a abstract parent class, in which we define the common attributes and methods
-for all animals. Only the 'speak' method is abstract, and it is defined in the grandchild classes.
-"""
 
 
 class Animal(ABC):
+    """
+    This is an abstract parent class, in which we define the common attributes and methods
+    for all animals. Only the 'speak' method is abstract, and it is defined in the grandchild classes.
+    """
+
+    # ===============================
+    #   CONSTRUCTOR AND ATTRIBUTES
+    # ===============================
+
     def __init__(self, name: str, species: str, age: int, dietary_needs: str):
         self._name = name
         self._species = species
@@ -30,9 +34,24 @@ class Animal(ABC):
         self._health_records: list[HealthRecord] = []
         self._undergoing_treatment = False
 
+    # ===============================
+    #       ABSTRACT METHODS
+    # ===============================
+
     @abstractmethod
     def speak(self):
         pass
+
+    # ===============================
+    #  STRING REPRESENTATION METHOD
+    # ===============================
+
+    def __str__(self):
+        return f"I am {self._name} the {self._species} and I am {self._age} years old."
+
+    # ===============================
+    #           PROPERTIES
+    # ===============================
 
     @property
     def name(self):
@@ -54,17 +73,9 @@ class Animal(ABC):
     def health_records(self):
         return self._health_records
 
-    @health_records.setter
-    def health_records(self, record: HealthRecord):
-        self._health_records.append(record)
-
     @property
     def undergoing_treatment(self):
         return self._undergoing_treatment
-
-    @undergoing_treatment.setter
-    def undergoing_treatment(self, value):
-        self._undergoing_treatment = value
 
     @property
     def treatment_status(self) -> str:
@@ -80,22 +91,43 @@ class Animal(ABC):
     def on_display(self):
         return self._on_display
 
+    # ===============================
+    #           SETTERS
+    # ===============================
+
+    @health_records.setter
+    def health_records(self, record: HealthRecord):
+        self._health_records.append(record)
+
+    @undergoing_treatment.setter
+    def undergoing_treatment(self, value):
+        self._undergoing_treatment = value
+
     @on_display.setter
     def on_display(self, value):
         self._on_display = value
 
+    # ===============================
+    #        BEHAVIOR METHODS
+    # ===============================
+
     def eat(self):
+        """Randomly selects a food option based on the animal's dietary needs."""
+
+        # Food options for each diet category
         foods = {"herbivore": ["grass", "leaves", "bark", "fruit", "flowers"],
                  "omnivore": ["insects", "nuts", "small fish", "grains"],
                  "carnivore": ["meat", "eggs", "fish"]}
+
+        # Choose a random food option appropriate for this animal's diet.
         food = random.choice(foods[self._dietary_needs])
+
+        # Show the eating action
         print(f"{self._name} is eating {food}.")
 
     def sleep(self):
+        """Displays a message indicating that the animal is sleeping."""
         print(f"{self._name} is sleeping.")
-
-    def __str__(self):
-        return f"I am {self._name} the {self._species} and I am {self._age} years old."
 
     def add_health_record(
             self,
@@ -105,6 +137,9 @@ class Animal(ABC):
             treatment_plan: str = "",
             notes: str = ""
     ):
+        """Adds a health record to the animal's list of records."""
+
+        # Create a new HealthRecord object.
         record = HealthRecord(
             issue_type=issue_type,
             description=description,
@@ -112,5 +147,7 @@ class Animal(ABC):
             treatment_plan=treatment_plan,
             notes=notes
         )
+
+        # Append the record to the animal's list of records and confirm the addition.
         self.health_records.append(record)
         print(f"Health record added for {self._name}: {record}")

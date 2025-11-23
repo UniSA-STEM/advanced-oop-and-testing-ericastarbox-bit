@@ -6,10 +6,11 @@ ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
+
 from animal import Animal
 from abc import ABC
 
 
-# This is an abstract subclass — no new methods or attributes.
 class Reptile(Animal, ABC):
+    """Abstract subclass of Reptile representing all reptile species in the zoo."""
     pass

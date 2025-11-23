@@ -11,11 +11,25 @@ from staff import Staff
 
 
 class ZooKeeper(Staff):
+    """
+    Represents a zookeeper working in the zoo.
+    Inherits core staff attributes and methods from the Staff class.
+    Provides functionality to feed animals.
+    """
+
+    # ===============================
+    #   CONSTRUCTOR AND ATTRIBUTES
+    # ===============================
+
     def __init__(self, name):
         super().__init__(name)
         self._name = name
         self._animals = []
         self._job = "Zoo Keeper"
+
+    # ===============================
+    #           PROPERTIES
+    # ===============================
 
     @property
     def name(self):
@@ -25,19 +39,28 @@ class ZooKeeper(Staff):
     def animals(self):
         return self._animals
 
+    @property
+    def job(self):
+        return self._job
+
+    # ===============================
+    #           SETTER(S)
+    # ===============================
+
     @animals.setter
     def animals(self, animals):
         self._animals = animals
 
-    @property
-    def job(self):
-        return self._job
+    # ===============================
+    #        STAFF ACTIONS
+    # ===============================
 
     def feed_animal(self, animal, enclosure):
         """
         Feeds a single animal and reduces the cleanliness of its enclosure by 1.
         Cleanliness will not go below 0.
         """
+
         # Animal eats
         animal.eat()
 
