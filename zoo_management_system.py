@@ -11,7 +11,7 @@ from bird import Bird
 from crocodile import Crocodile
 from elephant import Elephant
 from enclosure import Enclosure
-from terrarium import terrarium
+from terrarium import Terrarium
 from terrestrial import Terrestrial
 from aviary import Aviary
 from lion import Lion
@@ -39,7 +39,7 @@ class ZooManagementSystem:
         self._staff = []
         self._enclosure_rules = [
             (Mammal, Terrestrial),
-            (Reptile, terrarium),
+            (Reptile, Terrarium),
             (Bird, Aviary)
         ]
 
@@ -811,7 +811,7 @@ class ZooManagementSystem:
                     "peacock": Peacock, "snake": Snake, "swan": Swan
                 },
                 "enclosure": {
-                    "terrestrial": Terrestrial, "terrarium": terrarium, "aviary": Aviary
+                    "terrestrial": Terrestrial, "terrarium": Terrarium, "aviary": Aviary
                 },
                 "staff": {
                     "vet": Vet, "zoo keeper": ZooKeeper, "cleaner": Cleaner
@@ -970,7 +970,7 @@ class ZooManagementSystem:
             return None
 
         # Filter enclosures to only those of the required type
-        valid_enclosures = list[Enclosure] = [
+        valid_enclosures = [
             enclosure for enclosure in self.enclosures
             if isinstance(enclosure, required_type)
         ]

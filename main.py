@@ -12,28 +12,29 @@ from zoo_management_system import ZooManagementSystem
 
 
 # ===============================
+#     UTILITY FORMATTING
+# ===============================
+
+def print_header(title: str):
+    """Print a formatted section header."""
+    print("\n" + "=" * 45)
+    print(f"{title.center(45)}")
+    print("=" * 45 + "\n")
+
+
+def wait():
+    """Pause after an action to improve readability."""
+    input("\nPress Enter to continue... ")
+
+
+# ===============================
 #     MENU PRINT FUNCTIONS
 # ===============================
 
-def print_menu():
-    """Print the main menu options for the zoo interface."""
-    print("\nWhat would you like to do next?\n")
-    print("1. Add enclosure")
-    print("2. Add animal")
-    print("3. Add staff")
-    print("4. Remove enclosure")
-    print("5. Remove animal")
-    print("6. Remove staff")
-    print("7. Clean an enclosure")
-    print("8. Feed an animal")
-    print("9. View zoo report")
-    print("10. View animal health issues")
-    print("0. Exit\n")
-
-
 def print_main_menu():
     """Print the main menu options for the zoo interface."""
-    print("\nWhat would you like to do next?")
+    print_header("Main Menu")
+    print("What would you like to do next?")
     print("1. Enclosure management")
     print("2. Animal management")
     print("3. Staff management")
@@ -43,7 +44,7 @@ def print_main_menu():
 
 def print_enclosure_menu():
     """Print the enclosure management menu."""
-    print("\nEnclosure Management")
+    print_header("Enclosure Management")
     print("1. Add enclosure")
     print("2. Remove enclosure")
     print("3. Clean an enclosure")
@@ -53,7 +54,7 @@ def print_enclosure_menu():
 
 def print_animal_menu():
     """Print the animal management menu."""
-    print("\nAnimal Management")
+    print_header("Animal Management")
     print("1. Add animal")
     print("2. Remove animal")
     print("3. Feed an animal")
@@ -66,20 +67,24 @@ def print_animal_menu():
 
 def print_staff_menu():
     """Print the staff management menu."""
-    print("\nStaff Management")
+    print_header("Staff Management")
     print("1. Add staff")
     print("2. Remove staff")
     print("3. Assign staff to an animal")
     print("4. Assign staff to an enclosure")
     print("5. Generate staff report")
-    print("0. Back to main menu")
+    print("0. Back to main menu\n")
 
 
 def print_reports_menu():
-    """Print the reports menu."""
-    print("\nReports")
-    print("1. View zoo report")
-    print("0. Back to main menu")
+    """Print the report menu."""
+    print_header("Reports")
+    print("1. Full zoo report")
+    print("2. Daily routines")
+    print("3. Animal-only report")
+    print("4. Enclosure-only report")
+    print("5. Staff-only report")
+    print("0. Back to main menu\n")
 
 
 # ===============================
@@ -155,13 +160,21 @@ def handle_staff_menu(zoo: ZooManagementSystem):
 
 
 def handle_reports_menu(zoo: ZooManagementSystem):
-    """Handle report-related actions."""
+    """Handles report-related actions."""
     while True:
         print_reports_menu()
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
             zoo.generate_report()
+        elif choice == "2":
+            zoo.schedule_daily_routines()
+        elif choice == "3":
+            zoo.generate_animal_report()
+        elif choice == "4":
+            zoo.generate_enclosure_report()
+        elif choice == "5":
+            zoo.generate_staff_report()
         elif choice == "0":
             break
         else:
@@ -174,11 +187,12 @@ def handle_reports_menu(zoo: ZooManagementSystem):
 
 def start_zoo():
     """Create a ZooManagementSystem and run the text-based interface."""
-    print("\nWelcome to the Zoo Management System!")
+    print_header("Welcome to the Zoo Management System")
     zoo_name = input("Enter a name for your zoo: ").strip() or "Unnamed Zoo"
     zoo = ZooManagementSystem(zoo_name)
 
     print(f"\nYou’ve just started a zoo called {zoo.name}!")
+    wait()
 
     while True:
         print_main_menu()
@@ -197,7 +211,7 @@ def start_zoo():
             break
         else:
             print("Invalid choice. Please enter a number from the menu.")
-
+            wait()
 
 if __name__ == "__main__":
     start_zoo()
