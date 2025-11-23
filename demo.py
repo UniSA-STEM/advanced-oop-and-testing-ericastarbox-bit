@@ -8,17 +8,17 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from zoo_management_system import ZooManagementSystem
-from crocodile import Crocodile
-from terrarium import Terrarium
-from terrestrial import Terrestrial
-from aviary import Aviary
-from lion import Lion
-from peacock import Peacock
-from vet import Vet
-from cleaner import Cleaner
-from zoo_keeper import ZooKeeper
-from swan import Swan
+from core.zoo_management_system import ZooManagementSystem
+from animals.crocodile import Crocodile
+from enclosures.terrarium import Terrarium
+from enclosures.terrestrial import Terrestrial
+from enclosures.aviary import Aviary
+from animals.lion import Lion
+from animals.peacock import Peacock
+from staff.vet import Vet
+from staff.cleaner import Cleaner
+from staff.zoo_keeper import ZooKeeper
+from animals.swan import Swan
 
 
 def print_header(title):

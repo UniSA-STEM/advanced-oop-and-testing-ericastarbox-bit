@@ -8,7 +8,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 
-from animal import Animal
+from animals.animal import Animal
 from abc import ABC
 
 

@@ -10,7 +10,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 
 import random
 from abc import ABC, abstractmethod
-from health_record import HealthRecord
+from health.health_record import HealthRecord
 
 
 class Animal(ABC):

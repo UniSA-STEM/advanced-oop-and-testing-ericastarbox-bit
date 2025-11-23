@@ -1,12 +1,12 @@
 import unittest
-from zoo_management_system import ZooManagementSystem
-from lion import Lion
-from crocodile import Crocodile
-from peacock import Peacock
-from swan import Swan
-from terrestrial import Terrestrial
-from terrarium import Terrarium
-from aviary import Aviary
+from core.zoo_management_system import ZooManagementSystem
+from animals.lion import Lion
+from animals.crocodile import Crocodile
+from animals.peacock import Peacock
+from animals.swan import Swan
+from enclosures.terrestrial import Terrestrial
+from enclosures.terrarium import Terrarium
+from enclosures.aviary import Aviary
 
 
 class TestAnimalLogic(unittest.TestCase):

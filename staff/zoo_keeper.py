@@ -1,20 +1,20 @@
 """
-File: cleaner.py
-Description: Defines the cleaner class, representing staff members who clean the zoo.
+File: zoo_keeper.py
+Description: Defines the ZooKeeper class, representing zoo keepers in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from staff import Staff
+from staff.staff import Staff
 
 
-class Cleaner(Staff):
+class ZooKeeper(Staff):
     """
-    Represents a staff member who cleans the zoo.
+    Represents a zookeeper working in the zoo.
     Inherits core staff attributes and methods from the Staff class.
-    Provides functionality to clean enclosures.
+    Provides functionality to feed animals.
     """
 
     # ===============================
@@ -24,8 +24,8 @@ class Cleaner(Staff):
     def __init__(self, name):
         super().__init__(name)
         self._name = name
-        self._animals = None
-        self._job = "Cleaning"
+        self._animals = []
+        self._job = "Zoo Keeper"
 
     # ===============================
     #           PROPERTIES
@@ -39,8 +39,12 @@ class Cleaner(Staff):
     def animals(self):
         return self._animals
 
+    @property
+    def job(self):
+        return self._job
+
     # ===============================
-    #           SETTERS
+    #           SETTER(S)
     # ===============================
 
     @animals.setter
@@ -51,10 +55,20 @@ class Cleaner(Staff):
     #        STAFF ACTIONS
     # ===============================
 
-    def clean_enclosure(self, enclosure):
-        """Cleans the specified enclosure and restores its cleanliness to 5."""
-        enclosure.cleanliness = 5
+    def feed_animal(self, animal, enclosure):
+        """
+        Feeds a single animal and reduces the cleanliness of its enclosure by 1.
+        Cleanliness will not go below 0.
+        """
+
+        # Animal eats
+        animal.eat()
+
+        # Reduce cleanliness, ensuring it doesn't go below 0'
+        new_level = max(0, enclosure.cleanliness - 1)
+        enclosure.cleanliness = new_level
+
         print(
-            f"{self.name} cleaned {enclosure.name}. "
-            f"Cleanliness is now level {enclosure.cleanliness}."
+            f"{self.name} fed {animal.name}. "
+            f"{enclosure.name}'s cleanliness is now level {enclosure.cleanliness}."
         )

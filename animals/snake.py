@@ -1,19 +1,19 @@
 """
-File: lion.py
-Description: Defines the lion class, representing lions in the zoo.
+File: snake.py
+Description: Defines the snake class, representing snakes in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from mammal import Mammal
+from animals.reptile import Reptile
 
 
-class Lion(Mammal):
+class Snake(Reptile):
     """
-    Represents a Lion in the zoo.
-    Inherits from the Mammal class.
+    Represents a snake in the zoo.
+    Inherits from the Reptile class.
     """
 
     # ===============================
@@ -21,12 +21,12 @@ class Lion(Mammal):
     # ===============================
 
     def __init__(self, name, age):
-        super().__init__(name, "mammal", age, "carnivore")
+        super().__init__(name, "reptile", age, "carnivore")
 
     # ===============================
     #        BEHAVIOR METHODS
     # ===============================
 
     def speak(self):
-        """Prints a message indicating that the lion makes a roar."""
-        print(f"{self._name} says 'roar!'")
+        """Prints a message indicating that the snake makes a hiss sound."""
+        print(f"{self._name} says 'hiss!'")

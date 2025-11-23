@@ -7,21 +7,21 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from bird import Bird
-from crocodile import Crocodile
-from elephant import Elephant
-from terrarium import Terrarium
-from terrestrial import Terrestrial
-from aviary import Aviary
-from lion import Lion
-from mammal import Mammal
-from peacock import Peacock
-from reptile import Reptile
-from snake import Snake
-from vet import Vet
-from cleaner import Cleaner
-from zoo_keeper import ZooKeeper
-from swan import Swan
+from animals.bird import Bird
+from animals.crocodile import Crocodile
+from animals.elephant import Elephant
+from enclosures.terrarium import Terrarium
+from enclosures.terrestrial import Terrestrial
+from enclosures.aviary import Aviary
+from animals.lion import Lion
+from animals.mammal import Mammal
+from animals.peacock import Peacock
+from animals.reptile import Reptile
+from animals.snake import Snake
+from staff.vet import Vet
+from staff.cleaner import Cleaner
+from staff.zoo_keeper import ZooKeeper
+from animals.swan import Swan
 
 
 class ZooManagementSystem:

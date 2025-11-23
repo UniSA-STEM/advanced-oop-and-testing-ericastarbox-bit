@@ -8,7 +8,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 
-from enclosure import Enclosure
+from enclosures.enclosure import Enclosure
 
 
 class Aviary(Enclosure):

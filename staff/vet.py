@@ -7,9 +7,9 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from staff import Staff
-from animal import Animal
-from health_record import HealthRecord
+from staff.staff import Staff
+from animals.animal import Animal
+from health.health_record import HealthRecord
 
 
 class Vet(Staff):

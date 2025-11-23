@@ -1,18 +1,19 @@
 """
-File: snake.py
-Description: Defines the snake class, representing snakes in the zoo.
+File: crocodile.py
+Description: Defines the crocodile class, representing crocodiles in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from reptile import Reptile
+
+from animals.reptile import Reptile
 
 
-class Snake(Reptile):
+class Crocodile(Reptile):
     """
-    Represents a snake in the zoo.
+    Represents a crocodile in the zoo.
     Inherits from the Reptile class.
     """
 
@@ -28,5 +29,5 @@ class Snake(Reptile):
     # ===============================
 
     def speak(self):
-        """Prints a message indicating that the snake makes a hiss sound."""
-        print(f"{self._name} says 'hiss!'")
+        """Prints a message indicating that the crocodile makes a clucking noise."""
+        print(f"{self._name} says 'cluck!'")

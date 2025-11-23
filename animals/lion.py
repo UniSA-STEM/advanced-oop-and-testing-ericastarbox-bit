@@ -1,20 +1,19 @@
 """
-File: peacock.py
-Description: Defines the peacock class, representing peacocks in the zoo.
+File: lion.py
+Description: Defines the lion class, representing lions in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
+from animals.mammal import Mammal
 
-from bird import Bird
 
-
-class Peacock(Bird):
+class Lion(Mammal):
     """
-    Represents a peacock in the zoo.
-    Inherits from the Bird class.
+    Represents a Lion in the zoo.
+    Inherits from the Mammal class.
     """
 
     # ===============================
@@ -22,12 +21,12 @@ class Peacock(Bird):
     # ===============================
 
     def __init__(self, name, age):
-        super().__init__(name, "bird", age, "omnivore")
+        super().__init__(name, "mammal", age, "carnivore")
 
     # ===============================
     #        BEHAVIOR METHODS
     # ===============================
 
     def speak(self):
-        """Prints a message indicating that the peacock makes a screaming noise."""
-        print(f"{self._name} screams!")
+        """Prints a message indicating that the lion makes a roar."""
+        print(f"{self._name} says 'roar!'")

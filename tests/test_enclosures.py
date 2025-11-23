@@ -1,7 +1,7 @@
 import unittest
-from zoo_management_system import ZooManagementSystem
-from lion import Lion
-from terrestrial import Terrestrial
+from core.zoo_management_system import ZooManagementSystem
+from animals.lion import Lion
+from enclosures.terrestrial import Terrestrial
 
 class TestEnclosureMethods(unittest.TestCase):
     """Tests enclosure behaviour: assignment, cleaning."""

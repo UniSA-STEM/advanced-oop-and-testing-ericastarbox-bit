@@ -8,7 +8,7 @@ Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from zoo_management_system import ZooManagementSystem
+from core.zoo_management_system import ZooManagementSystem
 
 
 # ===============================

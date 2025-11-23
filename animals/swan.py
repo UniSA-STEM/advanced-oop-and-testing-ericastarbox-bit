@@ -1,20 +1,19 @@
 """
-File: crocodile.py
-Description: Defines the crocodile class, representing crocodiles in the zoo.
+File: swan.py
+Description: Defines the swan class, representing swans in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
+from animals.bird import Bird
 
-from reptile import Reptile
 
-
-class Crocodile(Reptile):
+class Swan(Bird):
     """
-    Represents a crocodile in the zoo.
-    Inherits from the Reptile class.
+    Represents a swan in the zoo.
+    Inherits from the bird class.
     """
 
     # ===============================
@@ -22,12 +21,12 @@ class Crocodile(Reptile):
     # ===============================
 
     def __init__(self, name, age):
-        super().__init__(name, "reptile", age, "carnivore")
+        super().__init__(name, "bird", age, "omnivore")
 
     # ===============================
     #        BEHAVIOR METHODS
     # ===============================
 
     def speak(self):
-        """Prints a message indicating that the crocodile makes a clucking noise."""
-        print(f"{self._name} says 'cluck!'")
+        """Prints a message indicating that the swan makes a honking noise."""
+        print(f"{self._name} honks!")

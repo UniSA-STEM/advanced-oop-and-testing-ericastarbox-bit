@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
-from zoo_management_system import ZooManagementSystem
-from zoo_keeper import ZooKeeper
-from cleaner import Cleaner
-from vet import Vet
-from lion import Lion
-from terrestrial import Terrestrial
+from core.zoo_management_system import ZooManagementSystem
+from staff.zoo_keeper import ZooKeeper
+from staff.cleaner import Cleaner
+from staff.vet import Vet
+from animals.lion import Lion
+from enclosures.terrestrial import Terrestrial
 
 
 class TestStaffLogic(unittest.TestCase):

@@ -1,19 +1,20 @@
 """
-File: swan.py
-Description: Defines the swan class, representing swans in the zoo.
+File: elephant.py
+Description: Defines the elephant class, representing elephants in the zoo.
 Author: Erica Box
 ID: 110468687
 Username: boxey001
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-from bird import Bird
+
+from animals.mammal import Mammal
 
 
-class Swan(Bird):
+class Elephant(Mammal):
     """
-    Represents a swan in the zoo.
-    Inherits from the bird class.
+    Represents an elephant in the zoo.
+    Inherits from the Mammal class.
     """
 
     # ===============================
@@ -21,12 +22,12 @@ class Swan(Bird):
     # ===============================
 
     def __init__(self, name, age):
-        super().__init__(name, "bird", age, "omnivore")
+        super().__init__(name, "mammal", age, "herbivore")
 
     # ===============================
     #        BEHAVIOR METHODS
     # ===============================
 
     def speak(self):
-        """Prints a message indicating that the swan makes a honking noise."""
-        print(f"{self._name} honks!")
+        """Prints a message indicating that the elephant makes a 'pawoo' noise."""
+        print(f"{self._name} says 'pawoo!'")
