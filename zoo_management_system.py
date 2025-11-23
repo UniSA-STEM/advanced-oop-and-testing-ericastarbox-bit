@@ -10,7 +10,6 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from bird import Bird
 from crocodile import Crocodile
 from elephant import Elephant
-from enclosure import Enclosure
 from terrarium import Terrarium
 from terrestrial import Terrestrial
 from aviary import Aviary

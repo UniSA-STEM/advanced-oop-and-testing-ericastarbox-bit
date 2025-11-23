@@ -46,7 +46,7 @@ class TestAnimalLogic(unittest.TestCase):
     def test_animals_are_compatible_peacock_swan(self):
         """Swans and peacocks should be compatible."""
         peacock = Peacock("Pia", 2)
-        swan = Swan("Snow", 3)
+        swan = Swan("love", 3)
         self.assertTrue(self.zoo.animals_are_compatible(peacock, swan))
 
     def test_animals_are_not_compatible_lion_crocodile(self):

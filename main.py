@@ -1,6 +1,6 @@
 """
 File: main.py
-Description: A text-based user interface for the Zoo Management System. Allows the player to create and
+Description: A text-based, interactive user interface for the Zoo Management System. Allows the player to create and
 manage animals, enclosures, and staff.
 Author: Erica Box
 ID: 110468687

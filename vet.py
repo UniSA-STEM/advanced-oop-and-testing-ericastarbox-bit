@@ -163,3 +163,32 @@ class Vet(Staff):
                 return
 
             print("Please enter 'y' or 'n'.")
+
+    def demo_health_check(self, animal):
+        """
+        Non-interactive demo version of health_check() for demo.py.
+        Creates a fixed example health record without the users input.
+        """
+
+        # Create a health record with demo details
+        issue_type = "Injury"
+        description = "Minor leg strain"
+        severity = 2
+        treatment_plan = "Apply rest and cold compress"
+
+        # Create a simple string representation of the health record
+        record = (
+            f"[DEMO] {issue_type} (Severity {severity}): {description}. "
+            f"Treatment: {treatment_plan}"
+        )
+
+        # Add the health record to the animal's list of records'
+        animal.health_records.append(record)
+
+        # Mark the animal as undergoing treatment
+        animal.undergoing_treatment = True
+
+        # Display the health record
+        print(f"{self.name} recorded a demo health issue for {animal.name}:")
+        print(f" - {record}\n")
+
